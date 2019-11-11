@@ -24,4 +24,4 @@ resources:
   type: git
   source:
     uri: https://github.com/williammartin/studio-ci.git
-    branch: dev
+    branch: master
