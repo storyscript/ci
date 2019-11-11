@@ -4,21 +4,35 @@ jobs:
   public: true
   plan:
     - get: studio
-      trigger: true
     - get: studio-ci
     - task: release
       file: studio-ci/release.yml
-    - put: studio
-    - put: studio
+    - put: studio-release
       params:
+        repository: studio
+    - put: studio-release
+      params:
+        repository: studio
         only_tag: true
+    - task: create-pr
+      file: studio-ci/create-pr.yml
+      params:
+        TOKEN: ((token))
 
 resources:
 - name: studio
   type: git
   source:
-    uri: https://github.com/storyscript/playground.git
+    uri: git@github.com:williammartin/studio.git
     branch: dev
+    private_key: ((private_key))
+
+- name: studio-release
+  type: git
+  source:
+    uri: git@github.com:williammartin/studio.git
+    branch: release
+    private_key: ((private_key))
 
 - name: studio-ci
   type: git
