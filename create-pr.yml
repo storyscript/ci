@@ -9,5 +9,8 @@ image_resource:
 params:
   TOKEN:
 
+inputs:
+  - name: studio-ci
+
 run:
   path: ./studio-ci/create-pr.sh
