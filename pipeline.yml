@@ -23,14 +23,14 @@ resources:
 - name: studio
   type: git
   source:
-    uri: git@github.com:williammartin/studio.git
+    uri: git@github.com:storyscript/studio.git
     branch: dev
     private_key: ((private_key))
 
 - name: studio-release
   type: git
   source:
-    uri: git@github.com:williammartin/studio.git
+    uri: git@github.com:storyscript/studio.git
     branch: release
     private_key: ((private_key))
 
