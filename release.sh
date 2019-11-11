@@ -7,5 +7,5 @@ pushd studio
   git config user.name "William Martin"
 
   yarn
-  yarn release --release minor
+  yarn release --release-as minor
 popd
