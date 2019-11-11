@@ -1,0 +1,27 @@
+---
+jobs:
+- name: release
+  public: true
+  plan:
+    - get: studio
+      trigger: true
+    - get: studio-ci
+    - task: release
+      file: studio-ci/release.yml
+    - put: studio
+    - put: studio
+      params:
+        only_tag: true
+
+resources:
+- name: studio
+  type: git
+  source:
+    uri: https://github.com/storyscript/playground.git
+    branch: dev
+
+- name: studio-ci
+  type: git
+  source:
+    uri: https://github.com/williammartin/studio-ci.git
+    branch: dev

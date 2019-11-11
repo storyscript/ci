@@ -1,0 +1,18 @@
+---
+platform: linux
+
+image_resource:
+  type: docker-image
+  source:
+    repository: node
+    tag: 13
+
+inputs:
+  - name: studio
+  - name: studio-ci
+
+outputs:
+  - name: studio
+
+run:
+  path: ./studio-ci/release.sh
