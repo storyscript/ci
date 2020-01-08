@@ -17,7 +17,7 @@ resources:
   - name: studio-ci
     type: git
     source:
-      branch: pool
+      branch: master
       uri: https://github.com/williammartin/studio-ci.git
   - name: studio-deployment
     type: git
