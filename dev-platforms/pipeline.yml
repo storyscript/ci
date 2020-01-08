@@ -17,7 +17,7 @@ resources:
   - name: studio-ci
     type: git
     source:
-      branch: master
+      branch: wip-helm
       uri: https://github.com/williammartin/studio-ci.git
   - name: studio-deployment
     type: git
@@ -68,6 +68,7 @@ jobs:
   - name: create-dev-platform
     plan:
       - in_parallel:
+        - get: pool-repo
         - get: studio-ci
         - get: studio-deployment
         - get: create-dev-platforms-trigger
@@ -90,6 +91,16 @@ jobs:
               region: europe-west4
               dns_zone_name: storyscript-ci
               domain: storyscript-ci.com
+        - task: generate-kubeconfig
+          file: studio-ci/dev-platforms/tasks/generate-kubeconfig.yml
+        - task: generate-helm-values
+          file: studio-ci/dev-platforms/tasks/generate-helm-values.yml
+          params:
+            DOMAIN: storyscript-ci.com
+        - task: helm-install-storyscript
+          file: studio-ci/dev-platforms/tasks/helm-install-storyscript.yml
+          params:
+            GCP_CREDENTIALS_JSON: ((gcp_credentials_json))
         - put: ready-pool
           params:
             add: terraform/
