@@ -22,7 +22,7 @@ resources:
   - name: studio-deployment
     type: git
     source:
-      branch: wip-auth
+      branch: master
       uri: https://github.com/williammartin/studio-deployment.git
   - name: ready-pool
     type: pool
