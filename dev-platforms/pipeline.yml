@@ -45,6 +45,13 @@ resources:
       uri: git@github.com:williammartin/dev-platform-pool.git
       pool: building-dev-platforms
       private_key: ((dev_platform_pool_deploy_key))
+  - name: github-apps-pool
+    type: pool
+    source:
+      branch: master
+      uri: git@github.com:williammartin/dev-platform-pool.git
+      pool: github-apps
+      private_key: ((dev_platform_pool_deploy_key))
   - name: pool-repo
     type: git
     source:
@@ -91,6 +98,9 @@ jobs:
               region: europe-west4
               dns_zone_name: storyscript-ci
               domain: storyscript-ci.com
+        - put: github-apps-pool
+          params:
+            acquire: true
         - task: generate-kubeconfig
           file: studio-ci/dev-platforms/tasks/generate-kubeconfig.yml
         - task: generate-helm-values
@@ -117,6 +127,9 @@ jobs:
               vars: *terraform-vars
             get_params:
               action: destroy
+          - put: github-apps-pool
+            params:
+              release: github-apps-pool/
           - put: building-pool
             params:
               remove: fake-placeholder-env/

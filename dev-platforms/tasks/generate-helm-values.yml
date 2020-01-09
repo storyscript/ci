@@ -9,6 +9,7 @@ image_resource:
 inputs:
   - name: studio-ci
   - name: terraform
+  - name: github-apps-pool
 
 outputs:
  - name: helmconfig
