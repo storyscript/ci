@@ -11,7 +11,7 @@ inputs:
   - name: platform-terraform
 
 outputs:
- - name: kubeconfig
+ - name: tfvars
 
 run:
-  path: studio-ci/dev-platforms/tasks/generate-kubeconfig.sh
+  path: studio-ci/dev-platforms/tasks/generate-github-app-tfvars.sh

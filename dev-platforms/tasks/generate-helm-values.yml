@@ -8,7 +8,7 @@ image_resource:
 
 inputs:
   - name: studio-ci
-  - name: terraform
+  - name: platform-terraform
   - name: github-apps-pool
 
 outputs:
