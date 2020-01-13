@@ -4,8 +4,10 @@
 script_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 workspace_dir="$( cd "${script_dir}/../../../" && pwd )"
 terraform_dir="${workspace_dir}/platform-terraform"
-helm_dir="${workspace_dir}/helmconfig"
 github_app_dir="${workspace_dir}/github-apps-pool"
+
+# OUTPUTS
+helm_dir="${workspace_dir}/helmconfig"
 
 name=$(cat "${terraform_dir}/name")
 

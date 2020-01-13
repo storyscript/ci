@@ -14,14 +14,6 @@ resources:
         bucket: dev-platforms
         prefix: terraform/state
         credentials: ((gcp_credentials_json))
-  - name: app-terraform
-    type: terraform
-    source:
-      backend_type: gcs
-      backend_config:
-        bucket: github-ouath-apps
-        prefix: terraform/state
-        credentials: ((gcp_credentials_json))
 
   - name: studio-ci
     type: git
@@ -89,18 +81,16 @@ jobs:
         - get: studio-deployment
         - get: create-dev-platforms-trigger
           trigger: true
-      - task: generate-fake-env-for-building-pool
-        file: studio-ci/dev-platforms/tasks/generate-fake-env-for-building-pool.yml
-      - put: building-pool
-        params:
-          add_claimed: fake-placeholder-env/
       - do:
         - put: github-apps-pool
           params:
             acquire: true
+        - put: building-pool
+          params:
+            add_claimed: github-apps-pool/
         - put: platform-terraform
           params:
-            generate_random_name: true
+            env_name_file: github-apps-pool/name
             delete_on_failure: true
             terraform_source: studio-deployment/
             vars: &terraform-vars
@@ -109,15 +99,6 @@ jobs:
               region: europe-west4
               dns_zone_name: storyscript-ci
               domain: storyscript-ci.com
-        - task: generate-tfvars
-          file: studio-ci/dev-platforms/tasks/generate-github-app-tfvars.yml
-        - put: app-terraform
-          params:
-            env_name_file: github-apps-pool/name
-            delete_on_failure: true
-            terraform_source: studio-ci/dev-platforms/tasks/configure-github-oauth/terraform/
-            var_files: [ tfvars/app.tfvars ]
-            vars: *terraform-vars
         - task: generate-kubeconfig
           file: studio-ci/dev-platforms/tasks/generate-kubeconfig.yml
         - task: generate-helm-values
@@ -133,7 +114,7 @@ jobs:
             add: platform-terraform/
         - put: building-pool
           params:
-            remove: fake-placeholder-env/
+            remove: github-apps-pool/
         on_failure:
           in_parallel:
           - put: platform-terraform
@@ -149,7 +130,7 @@ jobs:
               release: github-apps-pool/
           - put: building-pool
             params:
-              remove: fake-placeholder-env/
+              remove: building-pool/
 
   - name: delete-dev-platform
     plan:
@@ -161,15 +142,6 @@ jobs:
             - check-broken-pool-size
           trigger: true
       - do:
-        - task: generate-tfvars
-          file: studio-ci/dev-platforms/tasks/generate-tfvars.yml
-          params:
-            CREDENTIALS: ((gcp_credentials_json))
-            PROJECT: storyscript-ci
-            LOCATION: europe-west4
-            REGION: europe-west4
-            DNS_ZONE_NAME: storyscript-ci
-            DOMAIN: storyscript-ci.com
         - put: platform-terraform
           params:
             action: destroy
