@@ -137,7 +137,6 @@ jobs:
       - in_parallel:
         - get: studio-ci
         - get: studio-deployment
-        - get: github-apps-pool
         - get: broken-pool
           passed:
             - check-broken-pool-size
