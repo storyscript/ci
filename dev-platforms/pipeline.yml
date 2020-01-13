@@ -150,12 +150,12 @@ jobs:
             vars: *terraform-vars
           get_params:
             action: destroy
-        - put: broken-pool
-          params:
-            remove: broken-pool/
         - put: github-apps-pool
           params:
             release: broken-pool/
+        - put: broken-pool
+          params:
+            remove: broken-pool/
         on_failure:
           put: broken-pool
           params:
