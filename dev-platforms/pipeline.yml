@@ -138,6 +138,7 @@ jobs:
         - get: studio-ci
         - get: studio-deployment
         - get: broken-pool
+        - get: github-apps-pool
           passed:
             - check-broken-pool-size
           trigger: true
@@ -153,6 +154,9 @@ jobs:
         - put: broken-pool
           params:
             remove: broken-pool/
+        - put: github-apps-pool
+          params:
+            release: broken-pool/
         on_failure:
           put: broken-pool
           params:
