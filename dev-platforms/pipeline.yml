@@ -18,7 +18,7 @@ resources:
   - name: studio-ci
     type: git
     source:
-      branch: wip-helm
+      branch: master
       uri: https://github.com/williammartin/studio-ci.git
   - name: studio-deployment
     type: git
