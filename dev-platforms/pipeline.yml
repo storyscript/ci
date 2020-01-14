@@ -19,7 +19,7 @@ resources:
     type: git
     source:
       branch: master
-      uri: https://github.com/williammartin/studio-ci.git
+      uri: https://github.com/storyscriptinc/ci.git
   - name: studio-deployment
     type: git
     source:
