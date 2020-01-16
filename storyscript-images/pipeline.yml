@@ -22,7 +22,7 @@ resources:
     type: git
     source:
       uri: https://github.com/storyscript/platform-graphql
-      branch: jwt
+      branch: master
 
   - name: synapse-repo
     type: git
