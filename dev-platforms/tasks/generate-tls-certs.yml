@@ -1,0 +1,21 @@
+---
+platform: linux
+
+image_resource:
+  type: docker-image
+  source:
+    repository: certbot/dns-google
+    tag: latest
+
+inputs:
+  - name: studio-ci
+  - name: platform-terraform
+
+outputs:
+  - name: tls-certs
+
+params:
+ GCP_CREDENTIALS_JSON: ""
+
+run:
+  path: studio-ci/dev-platforms/tasks/generate-tls-certs.sh

@@ -10,6 +10,7 @@ inputs:
   - name: studio-ci
   - name: platform-terraform
   - name: github-apps-pool
+  - name: tls-certs
 
 outputs:
  - name: helmconfig
