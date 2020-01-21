@@ -31,6 +31,7 @@ auth:
     client_secret: ${client_secret}
 
 tls:
+  enabled: true
   fullchain: |
 $(awk '{printf "      %s\n", $0}' < ${tls_certs_dir}/fullchain.pem)
   privkey: |
