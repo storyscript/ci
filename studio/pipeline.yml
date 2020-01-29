@@ -1,0 +1,35 @@
+resources:
+  - name: studio-ci
+    type: git
+    source:
+      branch: studio-tests
+      uri: https://github.com/storyscriptinc/ci.git
+  - name: studio
+    type: git
+    source:
+      branch: e2e-in-container
+      uri: https://github.com/storyscript/studio.git
+
+jobs:
+  - name: run-units
+    plan:
+      - in_parallel:
+        - get: studio-ci
+        - get: studio
+      - do:
+        - task: run-units
+          file: studio-ci/studio/tasks/run-units.yml
+  - name: run-e2e
+    plan:
+      - in_parallel:
+        - get: studio-ci
+        - get: studio
+          passed:
+            - run-units
+      - do:
+        - task: run-e2e
+          file: studio-ci/studio/tasks/run-e2e.yml
+          params:
+            GITHUB_USERNAME: ((github.username))
+            GITHUB_PASSWD: ((github.password))
+            GITHUB_TOTP_SECRET: ((github.totp_secret))
