@@ -10,6 +10,7 @@ image_resource:
 inputs:
   - name: studio-ci
   - name: studio
+  - name: env
 
 caches:
   - path: node_modules

@@ -1,17 +1,16 @@
-#!/bin/sh
+#!/bin/bash
 
 set -eu
 
 # INPUTS
 workspace_dir="$(pwd)"
 studio_dir="${workspace_dir}/studio"
+env_dir="${workspace_dir}/env"
 
-cd "${studio_dir}"
+env_name=$(cat "${env_dir}/name")
+export TEST_URL="https://studio.${env_name}.storyscript-ci.com"
 
-export TEST_URL=https://studio.beatrix.storyscript-ci.com
-export WITH_NETLIFY=false
-export WITH_INTERCOM=false
-yarn
-yarn test:integration-headless
-
-cd "${workspace_dir}"
+pushd "${studio_dir}" > /dev/null
+  yarn
+  yarn test:integration-headless
+popd > /dev/null

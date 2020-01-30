@@ -9,6 +9,13 @@ resources:
     source:
       branch: e2e-in-container
       uri: https://github.com/storyscript/studio.git
+  - name: ready-pool
+    type: pool
+    source:
+      branch: master
+      uri: git@github.com:williammartin/dev-platform-pool.git
+      pool: dev-platforms
+      private_key: ((dev_platform_pool_deploy_key))
 
 jobs:
   - name: run-units
@@ -26,10 +33,21 @@ jobs:
         - get: studio
           passed:
             - run-units
+        - put: ready-pool
+          params:
+            acquire: true
       - do:
         - task: run-e2e
           file: studio-ci/studio/tasks/run-e2e.yml
+          input_mapping:
+            env: ready-pool
           params:
             GITHUB_USERNAME: ((github.username))
             GITHUB_PASSWD: ((github.password))
             GITHUB_TOTP_SECRET: ((github.totp_secret))
+        - put: broken-pool
+          params:
+            remove: ready-pool/
+        - put: ready-pool
+          params:
+            remove: ready-pool/
