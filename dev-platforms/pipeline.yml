@@ -99,6 +99,8 @@ jobs:
               region: europe-west4
               dns_zone_name: storyscript-ci
               domain: storyscript-ci.com
+              db_username: storyscript
+              db_password: storyscript
         - task: generate-kubeconfig
           file: studio-ci/dev-platforms/tasks/generate-kubeconfig.yml
         - task: generate-tls-certs
