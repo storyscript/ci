@@ -13,12 +13,19 @@ helm_dir="${workspace_dir}/helmconfig"
 name=$(cat "${terraform_dir}/name")
 
 lb_ip="$(jq -r .load_balancer_ip < "${terraform_dir}/metadata")"
+db_ip="$(jq -r .database_ip < "${terraform_dir}/metadata")"
 
 client_id="$(jq -r .client_id < "${github_app_dir}/metadata")"
 client_secret="$(jq -r .client_secret < "${github_app_dir}/metadata")"
 
 cat > "${helm_dir}/values.yml" <<EOF
 domain: ${name}.${DOMAIN}
+
+postgresql:
+  create: false
+  postgresqlHost: ${db_ip}
+  postgresqlUsername: storyscript
+  postgresqlPassword: storyscript
 
 nginx-ingress:
   controller:
