@@ -36,6 +36,12 @@ resources:
       uri: https://github.com/storyscript/http
       branch: master
 
+  - name: sls-repo
+    type: git
+    source:
+      uri: https://github.com/storyscript/sls
+      branch: master
+
   - name: schema-image
     type: docker-image
     source:
@@ -75,6 +81,13 @@ resources:
     type: docker-image
     source:
       repository: storyscript/gateway
+      username: {{dockerhub-username}}
+      password: {{dockerhub-password}}
+
+  - name: sls-image
+    type: docker-image
+    source:
+      repository: storyscript/sls
       username: {{dockerhub-username}}
       password: {{dockerhub-password}}
 
@@ -120,3 +133,10 @@ jobs:
     trigger: true
   - put: gateway-image
     params: {build: gateway-repo}
+
+- name: build-and-release-sls
+  plan:
+  - get: sls-repo
+    trigger: true
+  - put: sls-image
+    params: {build: sls-repo}
