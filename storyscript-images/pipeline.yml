@@ -94,49 +94,49 @@ resources:
 jobs:
 - name: build-and-release-schema
   plan:
-  - get: schema-repo
-    trigger: true
-  - put: schema-image
-    params: {build: schema-repo}
+    - get: schema-repo
+      trigger: true
+    - put: schema-image
+      params: {build: schema-repo}
 
 - name: build-and-release-auth
   plan:
-  - get: auth-repo
-    trigger: true
-  - put: auth-image
-    params: {build: auth-repo}
+    - get: auth-repo
+      trigger: true
+    - put: auth-image
+      params: {build: auth-repo}
 
 - name: build-and-release-runtime
   plan:
-  - get: runtime-repo
-    trigger: true
-  - put: runtime-image
-    params: {build: runtime-repo}
+    - get: runtime-repo
+      trigger: true
+    - put: runtime-image
+      params: {build: runtime-repo}
 
 - name: build-and-release-graphql
   plan:
-  - get: graphql-repo
-    trigger: true
-  - put: graphql-image
-    params: {build: graphql-repo}
+    - get: graphql-repo
+      trigger: true
+    - put: graphql-image
+      params: {build: graphql-repo}
 
 - name: build-and-release-synapse
   plan:
-  - get: synapse-repo
-    trigger: true
-  - put: synapse-image
-    params: {build: synapse-repo}
+    - get: synapse-repo
+      trigger: true
+    - put: synapse-image
+      params: {build: synapse-repo}
 
 - name: build-and-release-gateway
   plan:
-  - get: gateway-repo
-    trigger: true
-  - put: gateway-image
-    params: {build: gateway-repo}
+    - get: gateway-repo
+      trigger: true
+    - put: gateway-image
+      params: {build: gateway-repo}
 
 - name: build-and-release-sls
   plan:
-  - get: sls-repo
-    trigger: true
-  - put: sls-image
-    params: {build: sls-repo}
+    - get: sls-repo
+      trigger: true
+    - put: sls-image
+      params: {build: sls-repo}
