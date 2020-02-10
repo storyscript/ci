@@ -1,5 +1,12 @@
 ---
 resources:
+
+  - name: studio-ci
+    type: git
+    source:
+      branch: master
+      uri: https://github.com/storyscriptinc/ci.git
+
   - name: schema-repo
     type: git
     source:
@@ -94,49 +101,105 @@ resources:
 jobs:
 - name: build-and-release-schema
   plan:
+    - get: studio-ci
     - get: schema-repo
       trigger: true
+    - task: extract-tag
+      file: studio-ci/storyscript-images/tasks/extract-tag.yml
+      input_mapping: {repo: schema-repo}
+      output_mapping: {tag: schema-tag}
     - put: schema-image
-      params: {build: schema-repo}
+      params:
+        build: schema-repo
+        tag_file: schema-tag/tag
+        tag_as_latest: true
 
 - name: build-and-release-auth
   plan:
+    - get: studio-ci
     - get: auth-repo
       trigger: true
+    - task: extract-tag
+      file: studio-ci/storyscript-images/tasks/extract-tag.yml
+      input_mapping: {repo: auth-repo}
+      output_mapping: {tag: auth-tag}
     - put: auth-image
-      params: {build: auth-repo}
+      params:
+        build: auth-repo
+        tag_file: auth-tag/tag
+        tag_as_latest: true
 
 - name: build-and-release-runtime
   plan:
+    - get: studio-ci
     - get: runtime-repo
       trigger: true
+    - task: extract-tag
+      file: studio-ci/storyscript-images/tasks/extract-tag.yml
+      input_mapping: {repo: runtime-repo}
+      output_mapping: {tag: runtime-tag}
     - put: runtime-image
-      params: {build: runtime-repo}
+      params:
+        build: runtime-repo
+        tag_file: runtime-tag/tag
+        tag_as_latest: true
 
 - name: build-and-release-graphql
   plan:
+    - get: studio-ci
     - get: graphql-repo
       trigger: true
+    - task: extract-tag
+      file: studio-ci/storyscript-images/tasks/extract-tag.yml
+      input_mapping: {repo: graphql-repo}
+      output_mapping: {tag: graphql-tag}
     - put: graphql-image
-      params: {build: graphql-repo}
+      params:
+        build: graphql-repo
+        tag_file: graphql-tag/tag
+        tag_as_latest: true
 
 - name: build-and-release-synapse
   plan:
+    - get: studio-ci
     - get: synapse-repo
       trigger: true
+    - task: extract-tag
+      file: studio-ci/storyscript-images/tasks/extract-tag.yml
+      input_mapping: {repo: synapse-repo}
+      output_mapping: {tag: synapse-tag}
     - put: synapse-image
-      params: {build: synapse-repo}
+      params:
+        build: synapse-repo
+        tag_file: synapse-tag/tag
+        tag_as_latest: true
 
 - name: build-and-release-gateway
   plan:
+    - get: studio-ci
     - get: gateway-repo
       trigger: true
+    - task: extract-tag
+      file: studio-ci/storyscript-images/tasks/extract-tag.yml
+      input_mapping: {repo: gateway-repo}
+      output_mapping: {tag: gateway-tag}
     - put: gateway-image
-      params: {build: gateway-repo}
+      params:
+        build: gateway-repo
+        tag_file: gateway-tag/tag
+        tag_as_latest: true
 
 - name: build-and-release-sls
   plan:
+    - get: studio-ci
     - get: sls-repo
       trigger: true
+    - task: extract-tag
+      file: studio-ci/storyscript-images/tasks/extract-tag.yml
+      input_mapping: {repo: sls-repo}
+      output_mapping: {tag: sls-tag}
     - put: sls-image
-      params: {build: sls-repo}
+      params:
+        build: sls-repo
+        tag_file: sls-tag/tag
+        tag_as_latest: true
