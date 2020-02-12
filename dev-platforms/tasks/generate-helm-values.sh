@@ -24,6 +24,9 @@ domain: ${name}.${DOMAIN}
 schema:
   image: storyscript/schema:latest
 
+studio:
+  image: storyscript/studio:latest
+
 postgresql:
   create: false
   postgresqlHost: ${db_ip}
