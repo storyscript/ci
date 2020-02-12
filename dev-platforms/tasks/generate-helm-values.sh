@@ -21,6 +21,9 @@ client_secret="$(jq -r .client_secret < "${github_app_dir}/metadata")"
 cat > "${helm_dir}/values.yml" <<EOF
 domain: ${name}.${DOMAIN}
 
+schema:
+  image: storyscript/schema:latest
+
 postgresql:
   create: false
   postgresqlHost: ${db_ip}
