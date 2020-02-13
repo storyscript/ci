@@ -27,6 +27,12 @@ schema:
 studio:
   image: storyscript/studio:latest
 
+graphql:
+  image: storyscript/graphql:latest
+
+sls:
+  image: storyscript/sls:latest
+
 postgresql:
   create: false
   postgresqlHost: ${db_ip}
@@ -39,6 +45,7 @@ nginx-ingress:
       loadBalancerIP: ${lb_ip}
 
 auth:
+  image: storyscript/auth:latest
   github:
     client_id: ${client_id}
     client_secret: ${client_secret}
