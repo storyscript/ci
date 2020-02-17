@@ -124,20 +124,23 @@ jobs:
             remove: github-apps-pool/
         on_failure:
           do:
-            - put: platform-terraform
-              params:
-                action: destroy
-                env_name_file: platform-terraform/name
-                terraform_source: studio-deployment/
-                vars: *terraform-vars
-              get_params:
-                action: destroy
-            - put: github-apps-pool
-              params:
-                release: github-apps-pool/
-            - put: building-pool
-              params:
-                remove: building-pool/
+            - try:
+                put: platform-terraform
+                params:
+                  action: destroy
+                  env_name_file: platform-terraform/name
+                  terraform_source: studio-deployment/
+                  vars: *terraform-vars
+                get_params:
+                  action: destroy
+            - try:
+                put: github-apps-pool
+                params:
+                  release: github-apps-pool/
+            - try:
+                put: building-pool
+                params:
+                  remove: building-pool/
 
   - name: delete-dev-platform
     plan:
