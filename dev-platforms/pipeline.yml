@@ -127,7 +127,7 @@ jobs:
             - put: platform-terraform
               params:
                 action: destroy
-                env_name_file: platform-terraform/name
+                env_name_file: github-apps-pool/name
                 terraform_source: studio-deployment/
                 vars: *terraform-vars
               get_params:
