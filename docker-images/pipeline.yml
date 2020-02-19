@@ -113,9 +113,12 @@ jobs:
       trigger: true
       params:
         include_source_tarball: true
+    - task: untar-release
+      file: studio-ci/docker-images/tasks/untar-release.yml
+      input_mapping: {release: schema-release}
     - put: schema-image
       params:
-        build: schema-release
+        build: schema-release/source
         tag_file: schema-release/tag
         tag_as_latest: true
 
@@ -126,9 +129,12 @@ jobs:
       trigger: true
       params:
         include_source_tarball: true
+    - task: untar-release
+      file: studio-ci/docker-images/tasks/untar-release.yml
+      input_mapping: {release: auth-release}
     - put: auth-image
       params:
-        build: auth-release
+        build: auth-release/source
         tag_file: auth-release/tag
         tag_as_latest: true
 
@@ -139,9 +145,12 @@ jobs:
       trigger: true
       params:
         include_source_tarball: true
+    - task: untar-release
+      file: studio-ci/docker-images/tasks/untar-release.yml
+      input_mapping: {release: runtime-release}
     - put: runtime-image
       params:
-        build: runtime-release
+        build: runtime-release/source
         tag_file: runtime-release/tag
         tag_as_latest: true
 
@@ -152,9 +161,12 @@ jobs:
       trigger: true
       params:
         include_source_tarball: true
+    - task: untar-release
+      file: studio-ci/docker-images/tasks/untar-release.yml
+      input_mapping: {release: graphql-release}
     - put: graphql-image
       params:
-        build: graphql-release
+        build: graphql-release/source
         tag_file: graphql-release/tag
         tag_as_latest: true
 
@@ -165,9 +177,12 @@ jobs:
       trigger: true
       params:
         include_source_tarball: true
+    - task: untar-release
+      file: studio-ci/docker-images/tasks/untar-release.yml
+      input_mapping: {release: synapse-release}
     - put: synapse-image
       params:
-        build: synapse-release
+        build: synapse-release/source
         tag_file: synapse-release/tag
         tag_as_latest: true
 
@@ -178,9 +193,12 @@ jobs:
       trigger: true
       params:
         include_source_tarball: true
+    - task: untar-release
+      file: studio-ci/docker-images/tasks/untar-release.yml
+      input_mapping: {release: gateway-release}
     - put: gateway-image
       params:
-        build: gateway-release
+        build: gateway-release/source
         tag_file: gateway-release/tag
         tag_as_latest: true
 
@@ -191,8 +209,11 @@ jobs:
       trigger: true
       params:
         include_source_tarball: true
+    - task: untar-release
+      file: studio-ci/docker-images/tasks/untar-release.yml
+      input_mapping: {release: sls-release}
     - put: sls-image
       params:
-        build: sls-release
+        build: sls-release/source
         tag_file: sls-release/tag
         tag_as_latest: true
