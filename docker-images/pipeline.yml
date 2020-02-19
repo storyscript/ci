@@ -7,47 +7,54 @@ resources:
       branch: master
       uri: https://github.com/storyscriptinc/ci.git
 
-  - name: schema-repo
-    type: git
+  - name: schema-release
+    type: github-release
     source:
-      uri: https://github.com/storyscript/database
-      branch: master
+      owner: storyscript
+      repository: database
+      access_token: {{access-token}}
 
-  - name: auth-repo
-    type: git
+  - name: auth-release
+    type: github-release
     source:
-      uri: https://github.com/storyscript/auth
-      branch: master
+      owner: storyscript
+      repository: auth
+      access_token: {{access-token}}
 
-  - name: runtime-repo
-    type: git
+  - name: runtime-release
+    type: github-release
     source:
-      uri: https://github.com/storyscript/runtime
-      branch: master
+      owner: storyscript
+      repository: runtime
+      access_token: {{access-token}}
 
-  - name: graphql-repo
-    type: git
+  - name: graphql-release
+    type: github-release
     source:
-      uri: https://github.com/storyscript/platform-graphql
-      branch: master
+      owner: storyscript
+      repository: graphql
+      access_token: {{access-token}}
 
-  - name: synapse-repo
-    type: git
+  - name: synapse-release
+    type: github-release
     source:
-      uri: https://github.com/storyscript/platform-synapse
-      branch: master
+      owner: storyscript
+      repository: platform-synapse
+      access_token: {{access-token}}
 
-  - name: gateway-repo
-    type: git
+  - name: gateway-release
+    type: github-release
     source:
-      uri: https://github.com/storyscript/http
-      branch: master
+      owner: storyscript
+      repository: http
+      access_token: {{access-token}}
 
-  - name: sls-repo
-    type: git
+  - name: sls-release
+    type: github-release
     source:
-      uri: https://github.com/storyscript/sls
-      branch: master
+      owner: storyscript
+      repository: sls
+      access_token: {{access-token}}
 
   - name: schema-image
     type: docker-image
@@ -102,104 +109,90 @@ jobs:
 - name: build-and-release-schema
   plan:
     - get: studio-ci
-    - get: schema-repo
+    - get: schema-release
       trigger: true
-    - task: extract-tag
-      file: studio-ci/docker-images/tasks/extract-tag.yml
-      input_mapping: {repo: schema-repo}
-      output_mapping: {tag: schema-tag}
+      params:
+        include_source_zip: true
     - put: schema-image
       params:
-        build: schema-repo
-        tag_file: schema-tag/tag
+        build: schema-release
+        tag_file: schema-release/tag
         tag_as_latest: true
 
 - name: build-and-release-auth
   plan:
     - get: studio-ci
-    - get: auth-repo
+    - get: auth-release
       trigger: true
-    - task: extract-tag
-      file: studio-ci/docker-images/tasks/extract-tag.yml
-      input_mapping: {repo: auth-repo}
-      output_mapping: {tag: auth-tag}
+      params:
+        include_source_zip: true
     - put: auth-image
       params:
-        build: auth-repo
-        tag_file: auth-tag/tag
+        build: auth-release
+        tag_file: auth-release/tag
         tag_as_latest: true
 
 - name: build-and-release-runtime
   plan:
     - get: studio-ci
-    - get: runtime-repo
+    - get: runtime-release
       trigger: true
-    - task: extract-tag
-      file: studio-ci/docker-images/tasks/extract-tag.yml
-      input_mapping: {repo: runtime-repo}
-      output_mapping: {tag: runtime-tag}
+      params:
+        include_source_zip: true
     - put: runtime-image
       params:
-        build: runtime-repo
-        tag_file: runtime-tag/tag
+        build: runtime-release
+        tag_file: runtime-release/tag
         tag_as_latest: true
 
 - name: build-and-release-graphql
   plan:
     - get: studio-ci
-    - get: graphql-repo
+    - get: graphql-release
       trigger: true
-    - task: extract-tag
-      file: studio-ci/docker-images/tasks/extract-tag.yml
-      input_mapping: {repo: graphql-repo}
-      output_mapping: {tag: graphql-tag}
+      params:
+        include_source_zip: true
     - put: graphql-image
       params:
-        build: graphql-repo
-        tag_file: graphql-tag/tag
+        build: graphql-release
+        tag_file: graphql-release/tag
         tag_as_latest: true
 
 - name: build-and-release-synapse
   plan:
     - get: studio-ci
-    - get: synapse-repo
+    - get: synapse-release
       trigger: true
-    - task: extract-tag
-      file: studio-ci/docker-images/tasks/extract-tag.yml
-      input_mapping: {repo: synapse-repo}
-      output_mapping: {tag: synapse-tag}
+      params:
+        include_source_zip: true
     - put: synapse-image
       params:
-        build: synapse-repo
-        tag_file: synapse-tag/tag
+        build: synapse-release
+        tag_file: synapse-release/tag
         tag_as_latest: true
 
 - name: build-and-release-gateway
   plan:
     - get: studio-ci
-    - get: gateway-repo
+    - get: gateway-release
       trigger: true
-    - task: extract-tag
-      file: studio-ci/docker-images/tasks/extract-tag.yml
-      input_mapping: {repo: gateway-repo}
-      output_mapping: {tag: gateway-tag}
+      params:
+        include_source_zip: true
     - put: gateway-image
       params:
-        build: gateway-repo
-        tag_file: gateway-tag/tag
+        build: gateway-release
+        tag_file: gateway-release/tag
         tag_as_latest: true
 
 - name: build-and-release-sls
   plan:
     - get: studio-ci
-    - get: sls-repo
+    - get: sls-release
       trigger: true
-    - task: extract-tag
-      file: studio-ci/docker-images/tasks/extract-tag.yml
-      input_mapping: {repo: sls-repo}
-      output_mapping: {tag: sls-tag}
+      params:
+        include_source_zip: true
     - put: sls-image
       params:
-        build: sls-repo
-        tag_file: sls-tag/tag
+        build: sls-release
+        tag_file: sls-release/tag
         tag_as_latest: true
