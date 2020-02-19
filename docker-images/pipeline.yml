@@ -112,7 +112,7 @@ jobs:
     - get: schema-release
       trigger: true
       params:
-        include_source_zip: true
+        include_source_tarball: true
     - put: schema-image
       params:
         build: schema-release
@@ -125,7 +125,7 @@ jobs:
     - get: auth-release
       trigger: true
       params:
-        include_source_zip: true
+        include_source_tarball: true
     - put: auth-image
       params:
         build: auth-release
@@ -138,7 +138,7 @@ jobs:
     - get: runtime-release
       trigger: true
       params:
-        include_source_zip: true
+        include_source_tarball: true
     - put: runtime-image
       params:
         build: runtime-release
@@ -151,7 +151,7 @@ jobs:
     - get: graphql-release
       trigger: true
       params:
-        include_source_zip: true
+        include_source_tarball: true
     - put: graphql-image
       params:
         build: graphql-release
@@ -164,7 +164,7 @@ jobs:
     - get: synapse-release
       trigger: true
       params:
-        include_source_zip: true
+        include_source_tarball: true
     - put: synapse-image
       params:
         build: synapse-release
@@ -177,7 +177,7 @@ jobs:
     - get: gateway-release
       trigger: true
       params:
-        include_source_zip: true
+        include_source_tarball: true
     - put: gateway-image
       params:
         build: gateway-release
@@ -190,7 +190,7 @@ jobs:
     - get: sls-release
       trigger: true
       params:
-        include_source_zip: true
+        include_source_tarball: true
     - put: sls-image
       params:
         build: sls-release
