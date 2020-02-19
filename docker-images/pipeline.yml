@@ -110,6 +110,7 @@ jobs:
         trigger: true
       - put: schema-image
         params:
+          build: schema-repo
           tag_as_latest: true
 
   - name: build-schema-release
@@ -134,6 +135,7 @@ jobs:
         trigger: true
       - put: auth-image
         params:
+          build: auth-repo
           tag_as_latest: true
 
   - name: build-auth-release
@@ -158,6 +160,7 @@ jobs:
         trigger: true
       - put: runtime-image
         params:
+          build: runtime-repo
           tag_as_latest: true
 
   - name: build-runtime-release
@@ -182,6 +185,7 @@ jobs:
         trigger: true
       - put: graphql-image
         params:
+          build: graphql-repo
           tag_as_latest: true
 
   - name: build-graphql-release
@@ -206,6 +210,7 @@ jobs:
         trigger: true
       - put: sls-image
         params:
+          build: sls-repo
           tag_as_latest: true
 
   - name: build-sls-release
