@@ -11,5 +11,9 @@ inputs:
   - name: studio-ci
   - name: release
 
+outputs:
+  - name: source
+    path: release/source
+
 run:
   path: studio-ci/docker-images/tasks/untar-release.sh

@@ -116,6 +116,7 @@ jobs:
     - task: untar-release
       file: studio-ci/docker-images/tasks/untar-release.yml
       input_mapping: {release: schema-release}
+      output_mapping: {source: schema-source}
     - put: schema-image
       params:
         build: schema-release/source
@@ -132,6 +133,7 @@ jobs:
     - task: untar-release
       file: studio-ci/docker-images/tasks/untar-release.yml
       input_mapping: {release: auth-release}
+      output_mapping: {source: auth-source}
     - put: auth-image
       params:
         build: auth-release/source
@@ -148,6 +150,7 @@ jobs:
     - task: untar-release
       file: studio-ci/docker-images/tasks/untar-release.yml
       input_mapping: {release: runtime-release}
+      output_mapping: {source: runtime-source}
     - put: runtime-image
       params:
         build: runtime-release/source
@@ -164,6 +167,7 @@ jobs:
     - task: untar-release
       file: studio-ci/docker-images/tasks/untar-release.yml
       input_mapping: {release: graphql-release}
+      output_mapping: {source: graphql-source}
     - put: graphql-image
       params:
         build: graphql-release/source
@@ -180,6 +184,7 @@ jobs:
     - task: untar-release
       file: studio-ci/docker-images/tasks/untar-release.yml
       input_mapping: {release: synapse-release}
+      output_mapping: {source: synapse-source}
     - put: synapse-image
       params:
         build: synapse-release/source
@@ -196,6 +201,7 @@ jobs:
     - task: untar-release
       file: studio-ci/docker-images/tasks/untar-release.yml
       input_mapping: {release: gateway-release}
+      output_mapping: {source: gateway-source}
     - put: gateway-image
       params:
         build: gateway-release/source
@@ -212,8 +218,9 @@ jobs:
     - task: untar-release
       file: studio-ci/docker-images/tasks/untar-release.yml
       input_mapping: {release: sls-release}
+      output_mapping: {source: sls-source}
     - put: sls-image
       params:
-        build: sls-release/source
+        build: sls-source
         tag_file: sls-release/tag
         tag_as_latest: true
