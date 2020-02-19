@@ -14,12 +14,22 @@ resources:
       repository: database
       access_token: {{access-token}}
 
+  - name: schema-repo
+    type: git
+    source:
+      uri: https://github.com/storyscript/database.git
+
   - name: auth-release
     type: github-release
     source:
       owner: storyscript
       repository: auth
       access_token: {{access-token}}
+
+  - name: auth-repo
+    type: git
+    source:
+      uri: https://github.com/storyscript/auth.git
 
   - name: runtime-release
     type: github-release
@@ -28,6 +38,11 @@ resources:
       repository: runtime
       access_token: {{access-token}}
 
+  - name: runtime-repo
+    type: git
+    source:
+      uri: https://github.com/storyscript/runtime.git
+
   - name: graphql-release
     type: github-release
     source:
@@ -35,12 +50,22 @@ resources:
       repository: graphql
       access_token: {{access-token}}
 
+  - name: graphql-repo
+    type: git
+    source:
+      uri: https://github.com/storyscript/graphql.git
+
   - name: sls-release
     type: github-release
     source:
       owner: storyscript
       repository: sls
       access_token: {{access-token}}
+
+  - name: sls-repo
+    type: git
+    source:
+      uri: https://github.com/storyscript/sls.git
 
   - name: schema-image
     type: docker-image
@@ -79,7 +104,14 @@ resources:
 
 jobs:
 
-  - name: build-and-push-schema
+  - name: build-schema-latest
+    plan:
+      - get: schema-repo
+      - put: schema-image
+        params:
+          tag_as_latest: true
+
+  - name: build-schema-release
     plan:
       - get: studio-ci
       - get: schema-release
@@ -94,9 +126,15 @@ jobs:
         params:
           build: schema-source
           tag_file: schema-release/tag
+
+  - name: build-auth-latest
+    plan:
+      - get: auth-repo
+      - put: auth-image
+        params:
           tag_as_latest: true
 
-  - name: build-and-push-auth
+  - name: build-auth-release
     plan:
       - get: studio-ci
       - get: auth-release
@@ -111,9 +149,15 @@ jobs:
         params:
           build: auth-source
           tag_file: auth-release/tag
+
+  - name: build-runtime-latest
+    plan:
+      - get: runtime-repo
+      - put: runtime-image
+        params:
           tag_as_latest: true
 
-  - name: build-and-push-runtime
+  - name: build-runtime-release
     plan:
       - get: studio-ci
       - get: runtime-release
@@ -128,9 +172,15 @@ jobs:
         params:
           build: runtime-source
           tag_file: runtime-release/tag
+
+  - name: build-graphql-latest
+    plan:
+      - get: graphql-repo
+      - put: graphql-image
+        params:
           tag_as_latest: true
 
-  - name: build-and-push-graphql
+  - name: build-graphql-release
     plan:
       - get: studio-ci
       - get: graphql-release
@@ -145,9 +195,15 @@ jobs:
         params:
           build: graphql-source
           tag_file: graphql-release/tag
+
+  - name: build-sls-latest
+    plan:
+      - get: sls-repo
+      - put: sls-image
+        params:
           tag_as_latest: true
 
-  - name: build-and-push-sls
+  - name: build-sls-release
     plan:
       - get: studio-ci
       - get: sls-release
@@ -162,4 +218,3 @@ jobs:
         params:
           build: sls-source
           tag_file: sls-release/tag
-          tag_as_latest: true
