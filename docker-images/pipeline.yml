@@ -78,7 +78,7 @@ resources:
       password: {{dockerhub-password}}
 
 jobs:
-- name: build-and-release-schema
+- name: build-and-push-schema
   plan:
     - get: studio-ci
     - get: schema-release
@@ -95,7 +95,7 @@ jobs:
         tag_file: schema-release/tag
         tag_as_latest: true
 
-- name: build-and-release-auth
+- name: build-and-push-auth
   plan:
     - get: studio-ci
     - get: auth-release
@@ -112,7 +112,7 @@ jobs:
         tag_file: auth-release/tag
         tag_as_latest: true
 
-- name: build-and-release-runtime
+- name: build-and-push-runtime
   plan:
     - get: studio-ci
     - get: runtime-release
@@ -129,7 +129,7 @@ jobs:
         tag_file: runtime-release/tag
         tag_as_latest: true
 
-- name: build-and-release-graphql
+- name: build-and-push-graphql
   plan:
     - get: studio-ci
     - get: graphql-release
@@ -146,7 +146,7 @@ jobs:
         tag_file: graphql-release/tag
         tag_as_latest: true
 
-- name: build-and-release-sls
+- name: build-and-push-sls
   plan:
     - get: studio-ci
     - get: sls-release
