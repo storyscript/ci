@@ -78,87 +78,88 @@ resources:
       password: {{dockerhub-password}}
 
 jobs:
-- name: build-and-push-schema
-  plan:
-    - get: studio-ci
-    - get: schema-release
-      trigger: true
-      params:
-        include_source_tarball: true
-    - task: untar-release
-      file: studio-ci/docker-images/tasks/untar-release.yml
-      input_mapping: {release: schema-release}
-      output_mapping: {source: schema-source}
-    - put: schema-image
-      params:
-        build: schema-source
-        tag_file: schema-release/tag
-        tag_as_latest: true
 
-- name: build-and-push-auth
-  plan:
-    - get: studio-ci
-    - get: auth-release
-      trigger: true
-      params:
-        include_source_tarball: true
-    - task: untar-release
-      file: studio-ci/docker-images/tasks/untar-release.yml
-      input_mapping: {release: auth-release}
-      output_mapping: {source: auth-source}
-    - put: auth-image
-      params:
-        build: auth-source
-        tag_file: auth-release/tag
-        tag_as_latest: true
+  - name: build-and-push-schema
+    plan:
+      - get: studio-ci
+      - get: schema-release
+        trigger: true
+        params:
+          include_source_tarball: true
+      - task: untar-release
+        file: studio-ci/docker-images/tasks/untar-release.yml
+        input_mapping: {release: schema-release}
+        output_mapping: {source: schema-source}
+      - put: schema-image
+        params:
+          build: schema-source
+          tag_file: schema-release/tag
+          tag_as_latest: true
 
-- name: build-and-push-runtime
-  plan:
-    - get: studio-ci
-    - get: runtime-release
-      trigger: true
-      params:
-        include_source_tarball: true
-    - task: untar-release
-      file: studio-ci/docker-images/tasks/untar-release.yml
-      input_mapping: {release: runtime-release}
-      output_mapping: {source: runtime-source}
-    - put: runtime-image
-      params:
-        build: runtime-source
-        tag_file: runtime-release/tag
-        tag_as_latest: true
+  - name: build-and-push-auth
+    plan:
+      - get: studio-ci
+      - get: auth-release
+        trigger: true
+        params:
+          include_source_tarball: true
+      - task: untar-release
+        file: studio-ci/docker-images/tasks/untar-release.yml
+        input_mapping: {release: auth-release}
+        output_mapping: {source: auth-source}
+      - put: auth-image
+        params:
+          build: auth-source
+          tag_file: auth-release/tag
+          tag_as_latest: true
 
-- name: build-and-push-graphql
-  plan:
-    - get: studio-ci
-    - get: graphql-release
-      trigger: true
-      params:
-        include_source_tarball: true
-    - task: untar-release
-      file: studio-ci/docker-images/tasks/untar-release.yml
-      input_mapping: {release: graphql-release}
-      output_mapping: {source: graphql-source}
-    - put: graphql-image
-      params:
-        build: graphql-source
-        tag_file: graphql-release/tag
-        tag_as_latest: true
+  - name: build-and-push-runtime
+    plan:
+      - get: studio-ci
+      - get: runtime-release
+        trigger: true
+        params:
+          include_source_tarball: true
+      - task: untar-release
+        file: studio-ci/docker-images/tasks/untar-release.yml
+        input_mapping: {release: runtime-release}
+        output_mapping: {source: runtime-source}
+      - put: runtime-image
+        params:
+          build: runtime-source
+          tag_file: runtime-release/tag
+          tag_as_latest: true
 
-- name: build-and-push-sls
-  plan:
-    - get: studio-ci
-    - get: sls-release
-      trigger: true
-      params:
-        include_source_tarball: true
-    - task: untar-release
-      file: studio-ci/docker-images/tasks/untar-release.yml
-      input_mapping: {release: sls-release}
-      output_mapping: {source: sls-source}
-    - put: sls-image
-      params:
-        build: sls-source
-        tag_file: sls-release/tag
-        tag_as_latest: true
+  - name: build-and-push-graphql
+    plan:
+      - get: studio-ci
+      - get: graphql-release
+        trigger: true
+        params:
+          include_source_tarball: true
+      - task: untar-release
+        file: studio-ci/docker-images/tasks/untar-release.yml
+        input_mapping: {release: graphql-release}
+        output_mapping: {source: graphql-source}
+      - put: graphql-image
+        params:
+          build: graphql-source
+          tag_file: graphql-release/tag
+          tag_as_latest: true
+
+  - name: build-and-push-sls
+    plan:
+      - get: studio-ci
+      - get: sls-release
+        trigger: true
+        params:
+          include_source_tarball: true
+      - task: untar-release
+        file: studio-ci/docker-images/tasks/untar-release.yml
+        input_mapping: {release: sls-release}
+        output_mapping: {source: sls-source}
+      - put: sls-image
+        params:
+          build: sls-source
+          tag_file: sls-release/tag
+          tag_as_latest: true
