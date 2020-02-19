@@ -35,20 +35,6 @@ resources:
       repository: graphql
       access_token: {{access-token}}
 
-  - name: synapse-release
-    type: github-release
-    source:
-      owner: storyscript
-      repository: platform-synapse
-      access_token: {{access-token}}
-
-  - name: gateway-release
-    type: github-release
-    source:
-      owner: storyscript
-      repository: http
-      access_token: {{access-token}}
-
   - name: sls-release
     type: github-release
     source:
@@ -81,20 +67,6 @@ resources:
     type: docker-image
     source:
       repository: storyscript/graphql
-      username: {{dockerhub-username}}
-      password: {{dockerhub-password}}
-
-  - name: synapse-image
-    type: docker-image
-    source:
-      repository: storyscript/synapse
-      username: {{dockerhub-username}}
-      password: {{dockerhub-password}}
-
-  - name: gateway-image
-    type: docker-image
-    source:
-      repository: storyscript/gateway
       username: {{dockerhub-username}}
       password: {{dockerhub-password}}
 
@@ -172,40 +144,6 @@ jobs:
       params:
         build: graphql-source
         tag_file: graphql-release/tag
-        tag_as_latest: true
-
-- name: build-and-release-synapse
-  plan:
-    - get: studio-ci
-    - get: synapse-release
-      trigger: true
-      params:
-        include_source_tarball: true
-    - task: untar-release
-      file: studio-ci/docker-images/tasks/untar-release.yml
-      input_mapping: {release: synapse-release}
-      output_mapping: {source: synapse-source}
-    - put: synapse-image
-      params:
-        build: synapse-source
-        tag_file: synapse-release/tag
-        tag_as_latest: true
-
-- name: build-and-release-gateway
-  plan:
-    - get: studio-ci
-    - get: gateway-release
-      trigger: true
-      params:
-        include_source_tarball: true
-    - task: untar-release
-      file: studio-ci/docker-images/tasks/untar-release.yml
-      input_mapping: {release: gateway-release}
-      output_mapping: {source: gateway-source}
-    - put: gateway-image
-      params:
-        build: gateway-source
-        tag_file: gateway-release/tag
         tag_as_latest: true
 
 - name: build-and-release-sls
