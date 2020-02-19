@@ -105,7 +105,7 @@ jobs:
     - get: schema-repo
       trigger: true
     - task: extract-tag
-      file: studio-ci/storyscript-images/tasks/extract-tag.yml
+      file: studio-ci/docker-images/tasks/extract-tag.yml
       input_mapping: {repo: schema-repo}
       output_mapping: {tag: schema-tag}
     - put: schema-image
@@ -120,7 +120,7 @@ jobs:
     - get: auth-repo
       trigger: true
     - task: extract-tag
-      file: studio-ci/storyscript-images/tasks/extract-tag.yml
+      file: studio-ci/docker-images/tasks/extract-tag.yml
       input_mapping: {repo: auth-repo}
       output_mapping: {tag: auth-tag}
     - put: auth-image
@@ -135,7 +135,7 @@ jobs:
     - get: runtime-repo
       trigger: true
     - task: extract-tag
-      file: studio-ci/storyscript-images/tasks/extract-tag.yml
+      file: studio-ci/docker-images/tasks/extract-tag.yml
       input_mapping: {repo: runtime-repo}
       output_mapping: {tag: runtime-tag}
     - put: runtime-image
@@ -150,7 +150,7 @@ jobs:
     - get: graphql-repo
       trigger: true
     - task: extract-tag
-      file: studio-ci/storyscript-images/tasks/extract-tag.yml
+      file: studio-ci/docker-images/tasks/extract-tag.yml
       input_mapping: {repo: graphql-repo}
       output_mapping: {tag: graphql-tag}
     - put: graphql-image
@@ -165,7 +165,7 @@ jobs:
     - get: synapse-repo
       trigger: true
     - task: extract-tag
-      file: studio-ci/storyscript-images/tasks/extract-tag.yml
+      file: studio-ci/docker-images/tasks/extract-tag.yml
       input_mapping: {repo: synapse-repo}
       output_mapping: {tag: synapse-tag}
     - put: synapse-image
@@ -180,7 +180,7 @@ jobs:
     - get: gateway-repo
       trigger: true
     - task: extract-tag
-      file: studio-ci/storyscript-images/tasks/extract-tag.yml
+      file: studio-ci/docker-images/tasks/extract-tag.yml
       input_mapping: {repo: gateway-repo}
       output_mapping: {tag: gateway-tag}
     - put: gateway-image
@@ -195,7 +195,7 @@ jobs:
     - get: sls-repo
       trigger: true
     - task: extract-tag
-      file: studio-ci/storyscript-images/tasks/extract-tag.yml
+      file: studio-ci/docker-images/tasks/extract-tag.yml
       input_mapping: {repo: sls-repo}
       output_mapping: {tag: sls-tag}
     - put: sls-image

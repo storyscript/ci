@@ -15,4 +15,4 @@ outputs:
   - name: tag
 
 run:
-  path: studio-ci/storyscript-images/tasks/extract-tag.sh
+  path: studio-ci/docker-images/tasks/extract-tag.sh
