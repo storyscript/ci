@@ -246,3 +246,28 @@ jobs:
         params:
           build: sls-source
           tag_file: sls-release/tag
+
+  - name: build-worker-latest
+    plan:
+      - get: worker-repo
+        trigger: true
+      - put: worker-image
+        params:
+          build: worker-repo
+          tag_as_latest: true
+
+  - name: build-worker-release
+    plan:
+      - get: studio-ci
+      - get: worker-release
+        trigger: true
+        params:
+          include_source_tarball: true
+      - task: untar-release
+        file: studio-ci/docker-images/tasks/untar-release.yml
+        input_mapping: {release: worker-release}
+        output_mapping: {source: worker-source}
+      - put: worker-image
+        params:
+          build: worker-source
+          tag_file: worker-release/tag
