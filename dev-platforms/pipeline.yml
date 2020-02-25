@@ -20,11 +20,12 @@ resources:
     source:
       branch: master
       uri: https://github.com/storyscriptinc/ci.git
-  - name: studio-deployment
+  - name: platform-terraform-source
     type: git
     source:
       branch: master
-      uri: https://github.com/williammartin/studio-deployment.git
+      uri: git@github.com:storyscript/storyscript-platform-terraform.git
+      private_key: ((platform-terraform-deploy-key))
   - name: ready-pool
     type: pool
     source:
@@ -78,7 +79,7 @@ jobs:
       - in_parallel:
         - get: pool-repo
         - get: studio-ci
-        - get: studio-deployment
+        - get: platform-terraform-source
         - get: create-dev-platforms-trigger
           trigger: true
       - do:
@@ -92,7 +93,7 @@ jobs:
           params:
             env_name_file: github-apps-pool/name
             delete_on_failure: true
-            terraform_source: studio-deployment/
+            terraform_source: platform-terraform-source/
             vars: &terraform-vars
               credentials: ((gcp_credentials_json))
               project: storyscript-ci
@@ -128,7 +129,7 @@ jobs:
               params:
                 action: destroy
                 env_name_file: github-apps-pool/name
-                terraform_source: studio-deployment/
+                terraform_source: platform-terraform-source/
                 vars: *terraform-vars
               get_params:
                 action: destroy
@@ -143,7 +144,7 @@ jobs:
     plan:
       - in_parallel:
         - get: studio-ci
-        - get: studio-deployment
+        - get: platform-terraform-source
         - get: broken-pool
           passed:
             - check-broken-pool-size
@@ -153,7 +154,7 @@ jobs:
           params:
             action: destroy
             env_name_file: broken-pool/name
-            terraform_source: studio-deployment/
+            terraform_source: platform-terraform-source/
             vars: *terraform-vars
           get_params:
             action: destroy
