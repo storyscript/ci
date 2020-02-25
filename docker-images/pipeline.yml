@@ -1,6 +1,5 @@
 ---
 resources:
-
   - name: studio-ci
     type: git
     source:
@@ -67,6 +66,18 @@ resources:
     source:
       uri: https://github.com/storyscript/sls.git
 
+  - name: worker-release
+    type: github-release
+    source:
+      owner: storyscript
+      repository: worker
+      access_token: {{access-token}}
+
+  - name: worker-repo
+    type: git
+    source:
+      uri: https://github.com/storyscript/worker.git
+
   - name: schema-image
     type: docker-image
     source:
@@ -99,6 +110,13 @@ resources:
     type: docker-image
     source:
       repository: storyscript/sls
+      username: {{dockerhub-username}}
+      password: {{dockerhub-password}}
+
+  - name: worker-image
+    type: docker-image
+    source:
+      repository: storyscript/worker
       username: {{dockerhub-username}}
       password: {{dockerhub-password}}
 
