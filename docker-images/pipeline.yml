@@ -244,6 +244,10 @@ jobs:
         trigger: true
         params:
           include_source_tarball: true
+      - task: extract-tag
+        file: studio-ci/docker-images/tasks/extract-tag.yml
+        input_mapping: {release: sls-release}
+        output_mapping: {tag-env-var: sls-tag-env-var}
       - task: untar-release
         file: studio-ci/docker-images/tasks/untar-release.yml
         input_mapping: {release: sls-release}
@@ -251,6 +255,7 @@ jobs:
       - put: sls-image
         params:
           build: sls-source
+          build_args_file: sls-tag-env-var/tag-env-var.json
           tag_file: sls-release/tag
 
   - name: build-worker-latest
