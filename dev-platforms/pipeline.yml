@@ -25,7 +25,7 @@ resources:
     source:
       branch: master
       uri: git@github.com:storyscript/storyscript-platform-terraform.git
-      private_key: ((platform-terraform-deploy-key))
+      private_key: ((storyscript-infra-ssh-key))
   - name: ready-pool
     type: pool
     source:
