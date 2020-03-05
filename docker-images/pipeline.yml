@@ -84,6 +84,19 @@ resources:
       uri: git@github.com:storyscript/worker.git
       private_key: ((storyscript-infra-ssh-key))
 
+  - name: http-release
+    type: github-release
+    source:
+      owner: storyscript
+      repository: http
+      access_token: {{storyscript-infra-access-token}}
+
+  - name: http-repo
+    type: git
+    source:
+      uri: git@github.com:storyscript/http.git
+      private_key: ((storyscript-infra-ssh-key))
+
   - name: schema-image
     type: docker-image
     source:
@@ -123,6 +136,13 @@ resources:
     type: docker-image
     source:
       repository: storyscript/worker
+      username: {{dockerhub-username}}
+      password: {{dockerhub-password}}
+
+  - name: http-image
+    type: docker-image
+    source:
+      repository: storyscript/http
       username: {{dockerhub-username}}
       password: {{dockerhub-password}}
 
@@ -282,3 +302,28 @@ jobs:
         params:
           build: worker-source
           tag_file: worker-release/tag
+
+  - name: build-http-latest
+    plan:
+      - get: http-repo
+        trigger: true
+      - put: http-image
+        params:
+          build: http-repo
+          tag_as_latest: true
+
+  - name: build-http-release
+    plan:
+      - get: studio-ci
+      - get: http-release
+        trigger: true
+        params:
+          include_source_tarball: true
+      - task: untar-release
+        file: studio-ci/docker-images/tasks/untar-release.yml
+        input_mapping: {release: http-release}
+        output_mapping: {source: http-source}
+      - put: http-image
+        params:
+          build: http-source
+          tag_file: http-release/tag
