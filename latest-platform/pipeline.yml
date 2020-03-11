@@ -37,6 +37,20 @@ resources:
       username: {{dockerhub-username}}
       password: {{dockerhub-password}}
 
+  - name: runtime-image
+    type: docker-image
+    source:
+      repository: storyscript/runtime
+      username: {{dockerhub-username}}
+      password: {{dockerhub-password}}
+
+  - name: http-image
+    type: docker-image
+    source:
+      repository: storyscript/http
+      username: {{dockerhub-username}}
+      password: {{dockerhub-password}}
+
   - name: graphql-image
     type: docker-image
     source:
@@ -66,6 +80,10 @@ jobs:
       - get: schema-image
         trigger: true
       - get: auth-image
+        trigger: true
+      - get: runtime-image
+        trigger: true
+      - get: http-image
         trigger: true
       - get: graphql-image
         trigger: true
