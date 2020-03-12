@@ -97,6 +97,19 @@ resources:
       uri: git@github.com:storyscript/http.git
       private_key: ((storyscript-infra-ssh-key))
 
+  - name: wolfram-release
+    type: github-release
+    source:
+      owner: storyscript
+      repository: wolfram
+      access_token: {{storyscript-infra-access-token}}
+  
+  - name: wolfram-repo
+    type: git
+    source:
+      uri: git@github.com:storyscript/wolfram.git
+      private_key: ((storyscript-infra-ssh-key))
+  
   - name: schema-image
     type: docker-image
     source:
@@ -146,6 +159,13 @@ resources:
       username: {{dockerhub-username}}
       password: {{dockerhub-password}}
 
+  - name: wolfram-image
+    type: docker-image
+    source:
+      repository: storyscript/wolfram
+      username: {{dockerhub-username}}
+      password: {{dockerhub-password}}
+    
 jobs:
 
   - name: build-schema-latest
@@ -327,3 +347,29 @@ jobs:
         params:
           build: http-source
           tag_file: http-release/tag
+
+  - name: build-wolfram-latest
+    plan:
+      - get: wolfram-repo
+        trigger: true
+      - put: wolfram-image
+        params:
+          build: wolfram-repo
+          tag_as_latest: true
+
+  - name: build-wolfram-release
+    plan:
+      - get: studio-ci
+      - get: wolfram-release
+        trigger: true
+        params:
+          include_source_tarball: true
+      - task: untar-release
+        file: studio-ci/docker-images/tasks/untar-release.yml
+        input_mapping: {release: wolfram-release}
+        output_mapping: {source: wolfram-source}
+      - put: wolfram-image
+        params:
+          build: wolfram-source
+          tag_file: wolfram-release/tag
+          

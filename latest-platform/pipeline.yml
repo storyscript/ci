@@ -72,6 +72,13 @@ resources:
       username: {{dockerhub-username}}
       password: {{dockerhub-password}}
 
+  - name: wolfram-image
+    type: docker-image
+    source:
+      repository: storyscript/wolfram
+      username: {{dockerhub-username}}
+      password: {{dockerhub-password}}
+
 jobs:
 - name: roll-pods
   plan:
@@ -92,6 +99,8 @@ jobs:
       - get: studio-image
         trigger: true
       - get: latest-tf-infrastructure
+      - get: wolfram-image
+        trigger: true
     - do:
       - task: generate-kubeconfig
         file: studio-ci/latest-platform/tasks/generate-kubeconfig.yml
