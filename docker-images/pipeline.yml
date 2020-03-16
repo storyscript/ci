@@ -97,6 +97,19 @@ resources:
       uri: git@github.com:storyscript/http.git
       private_key: ((storyscript-infra-ssh-key))
 
+  - name: router-release
+    type: github-release
+    source:
+      owner: storyscript
+      repository: router
+      access_token: {{storyscript-infra-access-token}}
+
+  - name: router-repo
+    type: git
+    source:
+      uri: git@github.com:storyscript/router.git
+      private_key: ((storyscript-infra-ssh-key))
+
   - name: schema-image
     type: docker-image
     source:
