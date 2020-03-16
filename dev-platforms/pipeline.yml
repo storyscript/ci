@@ -115,6 +115,7 @@ jobs:
           file: studio-ci/dev-platforms/tasks/generate-helm-values.yml
           params:
             DOMAIN: storyscript-ci.com
+            APPS_DOMAIN: storyscriptapp-ci.com
         - task: helm-install-storyscript
           file: studio-ci/dev-platforms/tasks/helm-install-storyscript.yml
           params:

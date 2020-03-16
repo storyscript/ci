@@ -17,6 +17,7 @@ outputs:
 
 params:
   DOMAIN: ""
+  APPS_DOMAIN: ""
 
 run:
   path: studio-ci/dev-platforms/tasks/generate-helm-values.sh
