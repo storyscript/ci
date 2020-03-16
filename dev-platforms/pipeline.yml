@@ -153,12 +153,6 @@ jobs:
             - check-broken-pool-size
           trigger: true
       - do:
-        - task: generate-kubeconfig
-          file: studio-ci/dev-platforms/tasks/generate-kubeconfig.yml
-        - task: helm-uninstall-storyscript
-          file: studio-ci/dev-platforms/tasks/helm-uninstall-storyscript.yml
-          params:
-            GCP_CREDENTIALS_JSON: ((gcp_credentials_json))
         - put: platform-terraform
           params:
             action: destroy
