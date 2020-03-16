@@ -6,19 +6,7 @@ resources:
       branch: master
       uri: https://github.com/storyscriptinc/ci.git
 
-  - name: schema-release
-    type: github-release
-    source:
-      owner: storyscript
-      repository: database
-      access_token: {{storyscript-infra-access-token}}
-
-  - name: schema-repo
-    type: git
-    source:
-      uri: git@github.com:storyscript/database.git
-      private_key: ((storyscript-infra-ssh-key))
-
+  ### auth
   - name: auth-release
     type: github-release
     source:
@@ -32,19 +20,14 @@ resources:
       uri: git@github.com:storyscript/auth.git
       private_key: ((storyscript-infra-ssh-key))
 
-  - name: runtime-release
-    type: github-release
+  - name: auth-image
+    type: docker-image
     source:
-      owner: storyscript
-      repository: runtime
-      access_token: {{storyscript-infra-access-token}}
+      repository: storyscript/auth
+      username: {{dockerhub-username}}
+      password: {{dockerhub-password}}
 
-  - name: runtime-repo
-    type: git
-    source:
-      uri: git@github.com:storyscript/runtime.git
-      private_key: ((storyscript-infra-ssh-key))
-
+  ### GraphQL
   - name: graphql-release
     type: github-release
     source:
@@ -58,32 +41,14 @@ resources:
       uri: git@github.com:storyscript/graphql.git
       private_key: ((storyscript-infra-ssh-key))
 
-  - name: sls-release
-    type: github-release
+  - name: graphql-image
+    type: docker-image
     source:
-      owner: storyscript
-      repository: sls
-      access_token: {{storyscript-infra-access-token}}
+      repository: storyscript/graphql
+      username: {{dockerhub-username}}
+      password: {{dockerhub-password}}
 
-  - name: sls-repo
-    type: git
-    source:
-      uri: git@github.com:storyscript/sls.git
-      private_key: ((storyscript-infra-ssh-key))
-
-  - name: worker-release
-    type: github-release
-    source:
-      owner: storyscript
-      repository: worker
-      access_token: {{storyscript-infra-access-token}}
-
-  - name: worker-repo
-    type: git
-    source:
-      uri: git@github.com:storyscript/worker.git
-      private_key: ((storyscript-infra-ssh-key))
-
+  ### HTTP Service
   - name: http-release
     type: github-release
     source:
@@ -97,32 +62,26 @@ resources:
       uri: git@github.com:storyscript/http.git
       private_key: ((storyscript-infra-ssh-key))
 
-  - name: wolfram-release
-    type: github-release
-    source:
-      owner: storyscript
-      repository: wolfram
-      access_token: {{storyscript-infra-access-token}}
-  
-  - name: wolfram-repo
-    type: git
-    source:
-      uri: git@github.com:storyscript/wolfram.git
-      private_key: ((storyscript-infra-ssh-key))
-  
-  - name: schema-image
+  - name: http-image
     type: docker-image
     source:
-      repository: storyscript/schema
+      repository: storyscript/http
       username: {{dockerhub-username}}
       password: {{dockerhub-password}}
 
-  - name: auth-image
-    type: docker-image
+  ### Runtime
+  - name: runtime-release
+    type: github-release
     source:
-      repository: storyscript/auth
-      username: {{dockerhub-username}}
-      password: {{dockerhub-password}}
+      owner: storyscript
+      repository: runtime
+      access_token: {{storyscript-infra-access-token}}
+
+  - name: runtime-repo
+    type: git
+    source:
+      uri: git@github.com:storyscript/runtime.git
+      private_key: ((storyscript-infra-ssh-key))
 
   - name: runtime-image
     type: docker-image
@@ -131,12 +90,40 @@ resources:
       username: {{dockerhub-username}}
       password: {{dockerhub-password}}
 
-  - name: graphql-image
+  ### Schema
+  - name: schema-release
+    type: github-release
+    source:
+      owner: storyscript
+      repository: database
+      access_token: {{storyscript-infra-access-token}}
+
+  - name: schema-repo
+    type: git
+    source:
+      uri: git@github.com:storyscript/database.git
+      private_key: ((storyscript-infra-ssh-key))
+
+  - name: schema-image
     type: docker-image
     source:
-      repository: storyscript/graphql
+      repository: storyscript/schema
       username: {{dockerhub-username}}
       password: {{dockerhub-password}}
+
+  ### SLS
+  - name: sls-release
+    type: github-release
+    source:
+      owner: storyscript
+      repository: sls
+      access_token: {{storyscript-infra-access-token}}
+
+  - name: sls-repo
+    type: git
+    source:
+      uri: git@github.com:storyscript/sls.git
+      private_key: ((storyscript-infra-ssh-key))
 
   - name: sls-image
     type: docker-image
@@ -145,19 +132,19 @@ resources:
       username: {{dockerhub-username}}
       password: {{dockerhub-password}}
 
-  - name: worker-image
-    type: docker-image
+  ### Wolfram Service
+  - name: wolfram-release
+    type: github-release
     source:
-      repository: storyscript/worker
-      username: {{dockerhub-username}}
-      password: {{dockerhub-password}}
+      owner: storyscript
+      repository: wolfram
+      access_token: {{storyscript-infra-access-token}}
 
-  - name: http-image
-    type: docker-image
+  - name: wolfram-repo
+    type: git
     source:
-      repository: storyscript/http
-      username: {{dockerhub-username}}
-      password: {{dockerhub-password}}
+      uri: git@github.com:storyscript/wolfram.git
+      private_key: ((storyscript-infra-ssh-key))
 
   - name: wolfram-image
     type: docker-image
@@ -165,34 +152,30 @@ resources:
       repository: storyscript/wolfram
       username: {{dockerhub-username}}
       password: {{dockerhub-password}}
-    
+
+  ### Worker
+  - name: worker-release
+    type: github-release
+    source:
+      owner: storyscript
+      repository: worker
+      access_token: {{storyscript-infra-access-token}}
+
+  - name: worker-repo
+    type: git
+    source:
+      uri: git@github.com:storyscript/worker.git
+      private_key: ((storyscript-infra-ssh-key))
+
+  - name: worker-image
+    type: docker-image
+    source:
+      repository: storyscript/worker
+      username: {{dockerhub-username}}
+      password: {{dockerhub-password}}
+
 jobs:
-
-  - name: build-schema-latest
-    plan:
-      - get: schema-repo
-        trigger: true
-      - put: schema-image
-        params:
-          build: schema-repo
-          tag_as_latest: true
-
-  - name: build-schema-release
-    plan:
-      - get: studio-ci
-      - get: schema-release
-        trigger: true
-        params:
-          include_source_tarball: true
-      - task: untar-release
-        file: studio-ci/docker-images/tasks/untar-release.yml
-        input_mapping: {release: schema-release}
-        output_mapping: {source: schema-source}
-      - put: schema-image
-        params:
-          build: schema-source
-          tag_file: schema-release/tag
-
+  ### Auth
   - name: build-auth-latest
     plan:
       - get: auth-repo
@@ -218,31 +201,7 @@ jobs:
           build: auth-source
           tag_file: auth-release/tag
 
-  - name: build-runtime-latest
-    plan:
-      - get: runtime-repo
-        trigger: true
-      - put: runtime-image
-        params:
-          build: runtime-repo
-          tag_as_latest: true
-
-  - name: build-runtime-release
-    plan:
-      - get: studio-ci
-      - get: runtime-release
-        trigger: true
-        params:
-          include_source_tarball: true
-      - task: untar-release
-        file: studio-ci/docker-images/tasks/untar-release.yml
-        input_mapping: {release: runtime-release}
-        output_mapping: {source: runtime-source}
-      - put: runtime-image
-        params:
-          build: runtime-source
-          tag_file: runtime-release/tag
-
+  ### GraphQL
   - name: build-graphql-latest
     plan:
       - get: graphql-repo
@@ -268,6 +227,84 @@ jobs:
           build: graphql-source
           tag_file: graphql-release/tag
 
+  ### HTTP Service
+  - name: build-http-latest
+    plan:
+      - get: http-repo
+        trigger: true
+      - put: http-image
+        params:
+          build: http-repo
+          tag_as_latest: true
+
+  - name: build-http-release
+    plan:
+      - get: studio-ci
+      - get: http-release
+        trigger: true
+        params:
+          include_source_tarball: true
+      - task: untar-release
+        file: studio-ci/docker-images/tasks/untar-release.yml
+        input_mapping: {release: http-release}
+        output_mapping: {source: http-source}
+      - put: http-image
+        params:
+          build: http-source
+          tag_file: http-release/tag
+
+  ### Runtime
+  - name: build-runtime-latest
+    plan:
+      - get: runtime-repo
+        trigger: true
+      - put: runtime-image
+        params:
+          build: runtime-repo
+          tag_as_latest: true
+
+  - name: build-runtime-release
+    plan:
+      - get: studio-ci
+      - get: runtime-release
+        trigger: true
+        params:
+          include_source_tarball: true
+      - task: untar-release
+        file: studio-ci/docker-images/tasks/untar-release.yml
+        input_mapping: {release: runtime-release}
+        output_mapping: {source: runtime-source}
+      - put: runtime-image
+        params:
+          build: runtime-source
+          tag_file: runtime-release/tag
+
+  ### Schema
+  - name: build-schema-latest
+    plan:
+      - get: schema-repo
+        trigger: true
+      - put: schema-image
+        params:
+          build: schema-repo
+          tag_as_latest: true
+
+  - name: build-schema-release
+    plan:
+      - get: studio-ci
+      - get: schema-release
+        trigger: true
+        params:
+          include_source_tarball: true
+      - task: untar-release
+        file: studio-ci/docker-images/tasks/untar-release.yml
+        input_mapping: {release: schema-release}
+        output_mapping: {source: schema-source}
+      - put: schema-image
+        params:
+          build: schema-source
+          tag_file: schema-release/tag
+  ### SLS
   - name: build-sls-latest
     plan:
       - get: sls-repo
@@ -298,56 +335,7 @@ jobs:
           build_args_file: sls-tag-env-var/tag-env-var.json
           tag_file: sls-release/tag
 
-  - name: build-worker-latest
-    plan:
-      - get: worker-repo
-        trigger: true
-      - put: worker-image
-        params:
-          build: worker-repo
-          tag_as_latest: true
-
-  - name: build-worker-release
-    plan:
-      - get: studio-ci
-      - get: worker-release
-        trigger: true
-        params:
-          include_source_tarball: true
-      - task: untar-release
-        file: studio-ci/docker-images/tasks/untar-release.yml
-        input_mapping: {release: worker-release}
-        output_mapping: {source: worker-source}
-      - put: worker-image
-        params:
-          build: worker-source
-          tag_file: worker-release/tag
-
-  - name: build-http-latest
-    plan:
-      - get: http-repo
-        trigger: true
-      - put: http-image
-        params:
-          build: http-repo
-          tag_as_latest: true
-
-  - name: build-http-release
-    plan:
-      - get: studio-ci
-      - get: http-release
-        trigger: true
-        params:
-          include_source_tarball: true
-      - task: untar-release
-        file: studio-ci/docker-images/tasks/untar-release.yml
-        input_mapping: {release: http-release}
-        output_mapping: {source: http-source}
-      - put: http-image
-        params:
-          build: http-source
-          tag_file: http-release/tag
-
+  ### Wolfram Service
   - name: build-wolfram-latest
     plan:
       - get: wolfram-repo
@@ -372,4 +360,29 @@ jobs:
         params:
           build: wolfram-source
           tag_file: wolfram-release/tag
-          
+
+  ### Worker
+  - name: build-worker-latest
+    plan:
+      - get: worker-repo
+        trigger: true
+      - put: worker-image
+        params:
+          build: worker-repo
+          tag_as_latest: true
+
+  - name: build-worker-release
+    plan:
+      - get: studio-ci
+      - get: worker-release
+        trigger: true
+        params:
+          include_source_tarball: true
+      - task: untar-release
+        file: studio-ci/docker-images/tasks/untar-release.yml
+        input_mapping: {release: worker-release}
+        output_mapping: {source: worker-source}
+      - put: worker-image
+        params:
+          build: worker-source
+          tag_file: worker-release/tag
