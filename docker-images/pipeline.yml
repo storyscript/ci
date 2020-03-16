@@ -69,6 +69,27 @@ resources:
       username: {{dockerhub-username}}
       password: {{dockerhub-password}}
 
+  ### Router
+  - name: router-release
+    type: github-release
+    source:
+      owner: storyscript
+      repository: router
+      access_token: {{storyscript-infra-access-token}}
+
+  - name: router-repo
+    type: git
+    source:
+      uri: git@github.com:storyscript/router.git
+      private_key: ((storyscript-infra-ssh-key))
+
+  - name: router-image
+    type: docker-image
+    source:
+      repository: storyscript/router
+      username: {{dockerhub-username}}
+      password: {{dockerhub-password}}
+
   ### Runtime
   - name: runtime-release
     type: github-release
@@ -252,6 +273,32 @@ jobs:
         params:
           build: http-source
           tag_file: http-release/tag
+
+  ### Router
+  - name: build-router-latest
+    plan:
+      - get: router-repo
+        trigger: true
+      - put: router-image
+        params:
+          build: router-repo
+          tag_as_latest: true
+
+  - name: build-router-release
+    plan:
+      - get: studio-ci
+      - get: router-release
+        trigger: true
+        params:
+          include_source_tarball: true
+      - task: untar-release
+        file: studio-ci/docker-images/tasks/untar-release.yml
+        input_mapping: {release: router-release}
+        output_mapping: {source: router-source}
+      - put: router-image
+        params:
+          build: router-source
+          tag_file: router-release/tag
 
   ### Runtime
   - name: build-runtime-latest
