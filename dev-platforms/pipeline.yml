@@ -100,6 +100,8 @@ jobs:
               region: europe-west4
               dns_zone_name: storyscript-ci
               domain: storyscript-ci.com
+              apps_dns_zone_name: storyscriptapp-ci
+              apps_domain: storyscriptapp-ci.com
               db_username: storyscript
               db_password: storyscript
         - task: generate-kubeconfig
