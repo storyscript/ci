@@ -21,6 +21,18 @@ client_secret="$(jq -r .client_secret < "${github_app_dir}/metadata")"
 cat > "${helm_dir}/values.yml" <<EOF
 domain: ${name}.${DOMAIN}
 
+router:
+  image: storyscript/router:latest
+
+runtime:
+  image: storyscript/runtime:latest
+
+worker:
+  image: storyscript/worker:latest
+
+http:
+  image: storyscript/http:latest
+
 schema:
   image: storyscript/schema:latest
 
