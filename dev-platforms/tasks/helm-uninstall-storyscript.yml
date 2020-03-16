@@ -1,0 +1,18 @@
+---
+platform: linux
+
+image_resource:
+  type: docker-image
+  source:
+    repository: dtzar/helm-kubectl
+    tag: 3.0.2
+
+inputs:
+  - name: studio-ci
+  - name: kubeconfig
+
+params:
+ GCP_CREDENTIALS_JSON: ""
+
+run:
+  path: studio-ci/dev-platforms/tasks/helm-uninstall-storyscript.sh
