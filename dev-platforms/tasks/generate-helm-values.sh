@@ -13,6 +13,7 @@ helm_dir="${workspace_dir}/helmconfig"
 name=$(cat "${terraform_dir}/name")
 
 lb_ip="$(jq -r .load_balancer_ip < "${terraform_dir}/metadata")"
+router_ip="$(jq -r .router_ip < "${terraform_dir}/metadata")"
 db_ip="$(jq -r .database_ip < "${terraform_dir}/metadata")"
 
 client_id="$(jq -r .client_id < "${github_app_dir}/metadata")"
@@ -23,6 +24,7 @@ domain: ${name}.${DOMAIN}
 
 router:
   image: storyscript/router:latest
+  loadBalancerIP: ${router_ip}
 
 runtime:
   image: storyscript/runtime:latest
