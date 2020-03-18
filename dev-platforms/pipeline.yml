@@ -1,9 +1,13 @@
 resource_types:
-- name: terraform
-  type: docker-image
-  source:
-    repository: ljfranklin/terraform-resource
-    tag: latest
+  - name: terraform
+    type: docker-image
+    source:
+      repository: ljfranklin/terraform-resource
+      tag: latest
+  - name: helm
+    type: docker-image
+    source:
+      repository: anukulsangwan/concourse-helm3-resource
 
 resources:
   - name: platform-terraform
@@ -14,6 +18,14 @@ resources:
         bucket: dev-platforms
         prefix: terraform/state
         credentials: ((gcp_credentials_json))
+
+  - name: storyscript-chart
+    type: helm
+    source:
+      release: storyscript
+      repos:
+        - name: storyscript
+          url: https://storyscript.github.io/storyscript-chart
 
   - name: studio-ci
     type: git
@@ -116,10 +128,12 @@ jobs:
           params:
             DOMAIN: storyscript-ci.com
             APPS_DOMAIN: storyscriptapp-ci.com
-        - task: helm-install-storyscript
-          file: studio-ci/dev-platforms/tasks/helm-install-storyscript.yml
+        - put: storyscript-chart
           params:
-            GCP_CREDENTIALS_JSON: ((gcp_credentials_json))
+            chart: storyscript/storyscript
+            values: helmconfig/values.yml
+            kubeconfig_path: kubeconfig/kubeconfig.yml
+            debug: true
         - put: ready-pool
           params:
             add: platform-terraform/
