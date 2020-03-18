@@ -1,10 +1,14 @@
 ---
 resource_types:
-- name: terraform
-  type: docker-image
-  source:
-    repository: ljfranklin/terraform-resource
-    tag: latest
+  - name: terraform
+    type: docker-image
+    source:
+      repository: ljfranklin/terraform-resource
+      tag: latest
+  - name: helm
+    type: docker-image
+    source:
+      repository: anukulsangwan/concourse-helm3-resource
 
 resources:
   - name: latest-tf-infrastructure
@@ -27,7 +31,7 @@ resources:
   - name: studio-ci
     type: git
     source:
-      branch: master
+      branch: helm3
       uri: https://github.com/storyscriptinc/ci.git
 
   - name: schema-image
@@ -85,6 +89,14 @@ resources:
       repository: storyscript/wolfram
       username: {{dockerhub-username}}
       password: {{dockerhub-password}}
+
+  - name: storyscript-chart
+    type: helm
+    source:
+      release: storyscript
+      repos:
+        - name: storyscript
+          url: https://storyscript.github.io/storyscript-chart
 
 jobs:
 - name: roll-pods
@@ -150,7 +162,9 @@ jobs:
           GITHUB_CLIENT_SECRET: ((github.client_secret))
       - task: generate-kubeconfig
         file: studio-ci/latest-platform/tasks/generate-kubeconfig.yml
-      - task: helm-upgrade-storyscript
-        file: studio-ci/latest-platform/tasks/helm-upgrade-storyscript.yml
+      - put: storyscript-chart
         params:
-          GCP_CREDENTIALS_JSON: ((gcp_credentials_json))
+          chart: storyscript/storyscript
+          values: helmconfig/values.yml
+          kubeconfig_path: kubeconfig/kubeconfig.yml
+          debug: true
