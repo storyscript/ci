@@ -160,6 +160,7 @@ jobs:
           APPS_DOMAIN: storyscriptapp-ci.com
           GITHUB_CLIENT_ID: ((github.client_id))
           GITHUB_CLIENT_SECRET: ((github.client_secret))
+          WOLFRAM_APP_ID: ((wolfram_app_id))
       - task: generate-kubeconfig
         file: studio-ci/latest-platform/tasks/generate-kubeconfig.yml
       - put: storyscript-chart

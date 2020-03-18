@@ -19,6 +19,7 @@ params:
   APPS_DOMAIN: ""
   GITHUB_CLIENT_ID: ""
   GITHUB_CLIENT_SECRET: ""
+  WOLFRAM_APP_ID: ""
 
 run:
   path: studio-ci/latest-platform/tasks/generate-helm-values.sh
