@@ -128,6 +128,7 @@ jobs:
           params:
             DOMAIN: storyscript-ci.com
             APPS_DOMAIN: storyscriptapp-ci.com
+            WOLFRAM_APP_ID: ((wolfram_app_id))
         - put: storyscript-chart
           params:
             chart: storyscript/storyscript

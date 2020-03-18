@@ -29,6 +29,7 @@ router:
 
 runtime:
   image: storyscript/runtime:latest
+  wolfram_app_id: ${WOLFRAM_APP_ID}
 
 worker:
   image: storyscript/worker:latest
