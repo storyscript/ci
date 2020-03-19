@@ -110,7 +110,9 @@ jobs:
         trigger: true
     - do:
       - task: generate-kubeconfig
-        file: studio-ci/latest-platform/tasks/generate-kubeconfig.yml
+        file: studio-ci/common-tasks/generate-kubeconfig.yml
+        input_mapping:
+          platform-terraform: latest-tf-infrastructure
       - task: roll-pods
         file: studio-ci/latest-platform/tasks/roll-pods.yml
         params:
@@ -155,7 +157,9 @@ jobs:
           APPS_DOMAIN: storyscriptapp-ci.com
           WOLFRAM_APP_ID: ((wolfram_app_id))
       - task: generate-kubeconfig
-        file: studio-ci/latest-platform/tasks/generate-kubeconfig.yml
+        file: studio-ci/common-tasks/generate-kubeconfig.yml
+        input_mapping:
+          platform-terraform: latest-tf-infrastructure
       - task: helm-upgrade-storyscript
         file: studio-ci/latest-platform/tasks/helm-upgrade-storyscript.yml
         params:

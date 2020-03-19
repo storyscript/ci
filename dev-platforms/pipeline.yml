@@ -105,7 +105,7 @@ jobs:
               db_username: storyscript
               db_password: storyscript
         - task: generate-kubeconfig
-          file: studio-ci/dev-platforms/tasks/generate-kubeconfig.yml
+          file: studio-ci/common-tasks/generate-kubeconfig.yml
         - task: generate-tls-certs
           file: studio-ci/dev-platforms/tasks/generate-tls-certs.yml
           params:
