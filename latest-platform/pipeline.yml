@@ -161,7 +161,7 @@ jobs:
         input_mapping:
           platform-terraform: latest-tf-infrastructure
       - task: helm-upgrade-storyscript
-        file: studio-ci/latest-platform/tasks/helm-upgrade-storyscript.yml
+        file: studio-ci/common-tasks/helm-upgrade-storyscript.yml
         params:
           GCP_CREDENTIALS_JSON: ((gcp_credentials_json))
       - task: whitelist-team

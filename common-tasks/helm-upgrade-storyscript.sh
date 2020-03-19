@@ -15,4 +15,4 @@ export GOOGLE_APPLICATION_CREDENTIALS=${account_file}
 export KUBECONFIG=${kubeconfig_dir}/kubeconfig.yml
 
 helm repo add storyscript https://storyscript.github.io/storyscript-chart
-helm install -f ${helm_dir}/values.yml storyscript storyscript/storyscript --debug
+helm upgrade --install -f ${helm_dir}/values.yml storyscript storyscript/storyscript --debug

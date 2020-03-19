@@ -16,4 +16,4 @@ params:
  GCP_CREDENTIALS_JSON: ""
 
 run:
-  path: studio-ci/latest-platform/tasks/helm-upgrade-storyscript.sh
+  path: studio-ci/common-tasks/helm-upgrade-storyscript.sh

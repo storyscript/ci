@@ -120,7 +120,7 @@ jobs:
             APPS_DOMAIN: storyscriptapp-ci.com
             WOLFRAM_APP_ID: ((wolfram_app_id))
         - task: helm-install-storyscript
-          file: studio-ci/dev-platforms/tasks/helm-install-storyscript.yml
+          file: studio-ci/common-tasks/helm-upgrade-storyscript.yml
           params:
             GCP_CREDENTIALS_JSON: ((gcp_credentials_json))
         - task: whitelist-team
