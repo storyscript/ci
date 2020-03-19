@@ -107,7 +107,7 @@ jobs:
         - task: generate-kubeconfig
           file: studio-ci/common-tasks/generate-kubeconfig.yml
         - task: generate-tls-certs
-          file: studio-ci/dev-platforms/tasks/generate-tls-certs.yml
+          file: studio-ci/common-tasks/generate-tls-certs.yml
           params:
             TLS_FULL_CHAIN: ((tls.fullchain))
             TLS_PRIV_KEY: ((tls.privkey))

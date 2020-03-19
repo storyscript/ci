@@ -139,7 +139,7 @@ jobs:
             db_username: storyscript
             db_password: storyscript
       - task: generate-tls-certs
-        file: studio-ci/latest-platform/tasks/generate-tls-certs.yml
+        file: studio-ci/common-tasks/generate-tls-certs.yml
         params:
           TLS_FULL_CHAIN: ((tls.fullchain))
           TLS_PRIV_KEY: ((tls.privkey))

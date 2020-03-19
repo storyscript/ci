@@ -18,4 +18,4 @@ params:
  TLS_PRIV_KEY: ""
 
 run:
-  path: studio-ci/dev-platforms/tasks/generate-tls-certs.sh
+  path: studio-ci/common-tasks/generate-tls-certs.sh
