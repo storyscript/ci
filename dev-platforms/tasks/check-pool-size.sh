@@ -10,8 +10,7 @@ set -eu
 : "${GIT_EMAIL:="ci@storyscript.io"}"
 
 # INPUTS
-script_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-workspace_dir="$( cd "${script_dir}/../../../" && pwd )"
+workspace_dir=$(pwd)
 pool_dir="${workspace_dir}/env-pool"
 
 # OUTPUTS

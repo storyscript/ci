@@ -3,7 +3,7 @@
 set -Eeuo pipefail
 
 # INPUTS
-workspace_dir="$(pwd)"
+workspace_dir=$(pwd)
 release_dir="${workspace_dir}/release"
 
 pushd "${release_dir}" > /dev/null
