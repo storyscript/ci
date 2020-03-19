@@ -141,13 +141,18 @@ jobs:
         params:
           TLS_FULL_CHAIN: ((tls.fullchain))
           TLS_PRIV_KEY: ((tls.privkey))
+      - task: generate-github-credentials
+        file: studio-ci/latest-platform/tasks/generate-github-credentials.yml
+        params:
+          GITHUB_CLIENT_ID: ((github.client_id))
+          GITHUB_CLIENT_SECRET: ((github.client_secret))
       - task: generate-helm-values
-        file: studio-ci/latest-platform/tasks/generate-helm-values.yml
+        file: studio-ci/common-tasks/generate-helm-values.yml
+        input_mapping:
+          platform-terraform: latest-tf-infrastructure
         params:
           DOMAIN: storyscript-ci.com
           APPS_DOMAIN: storyscriptapp-ci.com
-          GITHUB_CLIENT_ID: ((github.client_id))
-          GITHUB_CLIENT_SECRET: ((github.client_secret))
           WOLFRAM_APP_ID: ((wolfram_app_id))
       - task: generate-kubeconfig
         file: studio-ci/latest-platform/tasks/generate-kubeconfig.yml

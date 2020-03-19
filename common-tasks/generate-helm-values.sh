@@ -1,9 +1,9 @@
 #!/bin/bash
 
 # INPUTS
-script_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-workspace_dir="$( cd "${script_dir}/../../../" && pwd )"
-terraform_dir="${workspace_dir}/latest-tf-infrastructure"
+workspace_dir=$(pwd)
+terraform_dir="${workspace_dir}/platform-terraform"
+github_credentials_dir="${workspace_dir}/github-credentials"
 tls_certs_dir="${workspace_dir}/tls-certs"
 
 # OUTPUTS
@@ -14,6 +14,9 @@ name=$(cat "${terraform_dir}/name")
 lb_ip="$(jq -r .load_balancer_ip < "${terraform_dir}/metadata")"
 router_ip="$(jq -r .router_ip < "${terraform_dir}/metadata")"
 db_ip="$(jq -r .database_ip < "${terraform_dir}/metadata")"
+
+client_id="$(jq -r .client_id < "${github_credentials_dir}/metadata")"
+client_secret="$(jq -r .client_secret < "${github_credentials_dir}/metadata")"
 
 cat > "${helm_dir}/values.yml" <<EOF
 domain: ${name}.${DOMAIN}
@@ -59,13 +62,13 @@ nginx-ingress:
 auth:
   image: storyscript/auth:latest
   github:
-    client_id: ${GITHUB_CLIENT_ID}
-    client_secret: ${GITHUB_CLIENT_SECRET}
+    client_id: ${client_id}
+    client_secret: ${client_secret}
 
 tls:
   enabled: true
   fullchain: |
-$(awk '{printf "      %s\n", $0}' < ${tls_certs_dir}/fullchain.pem)
+$(awk '{printf "      %s\n", $0}' < "${tls_certs_dir}"/fullchain.pem)
   privkey: |
-$(awk '{printf "      %s\n", $0}' < ${tls_certs_dir}/privkey.pem)
+$(awk '{printf "      %s\n", $0}' < "${tls_certs_dir}"/privkey.pem)
 EOF

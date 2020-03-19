@@ -8,7 +8,8 @@ image_resource:
 
 inputs:
   - name: studio-ci
-  - name: latest-tf-infrastructure
+  - name: platform-terraform
+  - name: github-credentials
   - name: tls-certs
 
 outputs:
@@ -17,9 +18,7 @@ outputs:
 params:
   DOMAIN: ""
   APPS_DOMAIN: ""
-  GITHUB_CLIENT_ID: ""
-  GITHUB_CLIENT_SECRET: ""
   WOLFRAM_APP_ID: ""
 
 run:
-  path: studio-ci/latest-platform/tasks/generate-helm-values.sh
+  path: studio-ci/common-tasks/generate-helm-values.sh

@@ -112,7 +112,9 @@ jobs:
             TLS_FULL_CHAIN: ((tls.fullchain))
             TLS_PRIV_KEY: ((tls.privkey))
         - task: generate-helm-values
-          file: studio-ci/dev-platforms/tasks/generate-helm-values.yml
+          file: studio-ci/common-tasks/generate-helm-values.yml
+          input_mapping:
+            github-credentials: github-apps-pool
           params:
             DOMAIN: storyscript-ci.com
             APPS_DOMAIN: storyscriptapp-ci.com
