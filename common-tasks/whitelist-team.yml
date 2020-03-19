@@ -16,4 +16,4 @@ params:
   AUTH_ALLOWLIST_TOKEN: ""
 
 run:
-  path: studio-ci/dev-platforms/tasks/whitelist-team.sh
+  path: studio-ci/common-tasks/whitelist-team.sh
