@@ -164,10 +164,11 @@ jobs:
         file: studio-ci/common-tasks/helm-upgrade-storyscript.yml
         params:
           GCP_CREDENTIALS_JSON: ((gcp_credentials_json))
-      - task: whitelist-team
-        file: studio-ci/common-tasks/whitelist-team.yml
-        input_mapping:
-          platform-terraform: latest-tf-infrastructure
-        params:
-          STORYSCRIPT_INFRA_PASSWORD: ((storyscript-infra-password))
-          AUTH_ALLOWLIST_TOKEN: ((auth-allowlist-token))
+      - try:
+          task: whitelist-team
+          file: studio-ci/common-tasks/whitelist-team.yml
+          input_mapping:
+            platform-terraform: latest-tf-infrastructure
+          params:
+            STORYSCRIPT_INFRA_PASSWORD: ((storyscript-infra-password))
+            AUTH_ALLOWLIST_TOKEN: ((auth-allowlist-token))
