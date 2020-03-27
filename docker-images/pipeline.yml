@@ -132,6 +132,13 @@ resources:
       username: {{dockerhub-username}}
       password: {{dockerhub-password}}
 
+  - name: schema-ci-image
+    type: docker-image
+    source:
+      repository: storyscript/schema-ci
+      username: {{dockerhub-username}}
+      password: {{dockerhub-password}}
+
   ### SLS
   - name: sls-release
     type: github-release
@@ -373,6 +380,16 @@ jobs:
         params:
           build: schema-source
           tag_file: schema-release/tag
+
+  - name: build-schema-ci-latest
+    plan:
+      - get: schema-repo
+        trigger: true
+      - put: schema-ci-image
+        params:
+          build: schema-repo/ci/docker
+          tag_as_latest: true
+
   ### SLS
   - name: build-sls-latest
     plan:
