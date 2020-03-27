@@ -132,6 +132,15 @@ resources:
       username: {{dockerhub-username}}
       password: {{dockerhub-password}}
 
+  ### Schema CI
+  - name: schema-ci-repo
+    type: git
+    source:
+      uri: git@github.com:storyscript/database.git
+      paths:
+        - ci/docker/
+      private_key: ((storyscript-infra-ssh-key))
+
   - name: schema-ci-image
     type: docker-image
     source:
@@ -383,11 +392,11 @@ jobs:
 
   - name: build-schema-ci-latest
     plan:
-      - get: schema-repo
+      - get: schema-ci-repo
         trigger: true
       - put: schema-ci-image
         params:
-          build: schema-repo/ci/docker
+          build: schema-ci-repo/ci/docker
           tag_as_latest: true
 
   ### SLS
