@@ -15,8 +15,10 @@ lb_ip="$(jq -r .load_balancer_ip < "${terraform_dir}/metadata")"
 router_ip="$(jq -r .router_ip < "${terraform_dir}/metadata")"
 db_ip="$(jq -r .database_ip < "${terraform_dir}/metadata")"
 
-client_id="$(jq -r .client_id < "${github_credentials_dir}/metadata")"
-client_secret="$(jq -r .client_secret < "${github_credentials_dir}/metadata")"
+github_client_id="$(jq -r .client_id < "${github_credentials_dir}/metadata")"
+github_client_secret="$(jq -r .client_secret < "${github_credentials_dir}/metadata")"
+
+google_service_account_key="$(jq -r .service_account_key < "${terraform_dir}/metadata")"
 
 cat > "${helm_dir}/values.yml" <<EOF
 domain: ${name}.${DOMAIN}
@@ -62,8 +64,8 @@ nginx-ingress:
 auth:
   image: storyscript/auth:latest
   github:
-    client_id: ${client_id}
-    client_secret: ${client_secret}
+    client_id: ${github_client_id}
+    client_secret: ${github_client_secret}
 
 tls:
   enabled: true
@@ -71,4 +73,13 @@ tls:
 $(awk '{printf "      %s\n", $0}' < "${tls_certs_dir}"/fullchain.pem)
   privkey: |
 $(awk '{printf "      %s\n", $0}' < "${tls_certs_dir}"/privkey.pem)
+
+creds:
+  gcp_secretmanager_key: ${google_service_account_key}
+  github:
+    client_id: ${github_client_id}
+    client_secret: ${github_client_secret}
+  slack:
+    client_id: ${SLACK_CLIENT_ID}
+    client_secret: ${SLACK_CLIENT_SECRET}
 EOF

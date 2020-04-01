@@ -156,6 +156,8 @@ jobs:
           DOMAIN: storyscript-ci.com
           APPS_DOMAIN: storyscriptapp-ci.com
           WOLFRAM_APP_ID: ((wolfram_app_id))
+          SLACK_CLIENT_ID: ((slack_client_id))
+          SLACK_CLIENT_SECRET: ((slack_client_secret))
       - task: generate-kubeconfig
         file: studio-ci/common-tasks/generate-kubeconfig.yml
         input_mapping:

@@ -19,6 +19,8 @@ params:
   DOMAIN: ""
   APPS_DOMAIN: ""
   WOLFRAM_APP_ID: ""
+  CREDS_SLACK_CLIENT_ID: ""
+  CREDS_SLACK_CLIENT_SECRET: ""
 
 run:
   path: studio-ci/common-tasks/generate-helm-values.sh
