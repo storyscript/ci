@@ -83,7 +83,8 @@ $(awk '{printf "      %s\n", $0}' < "${tls_certs_dir}"/fullchain.pem)
 $(awk '{printf "      %s\n", $0}' < "${tls_certs_dir}"/privkey.pem)
 
 creds:
-  gcp_secretmanager_key: ${google_service_account_key}
+  gcp_secretmanager_key: |
+    $(echo -n "${google_service_account_key}" | awk '{printf "      %s\n", $0}')
   github:
     client_id: ${github_client_id}
     client_secret: ${github_client_secret}
