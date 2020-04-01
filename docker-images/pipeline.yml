@@ -48,6 +48,27 @@ resources:
       username: {{dockerhub-username}}
       password: {{dockerhub-password}}
 
+  ### GEH
+  - name: geh-release
+    type: github-release
+    source:
+      owner: storyscript
+      repository: geh
+      access_token: {{storyscript-infra-access-token}}
+
+  - name: geh-repo
+    type: git
+    source:
+      uri: git@github.com:storyscript/geh.git
+      private_key: ((storyscript-infra-ssh-key))
+
+  - name: geh-image
+    type: docker-image
+    source:
+      repository: storyscript/geh
+      username: {{dockerhub-username}}
+      password: {{dockerhub-password}}
+
   ### GraphQL
   - name: graphql-release
     type: github-release
@@ -263,6 +284,32 @@ jobs:
         params:
           build: creds-source
           tag_file: creds-release/tag
+
+  ### GEH
+  - name: build-geh-latest
+    plan:
+      - get: geh-repo
+        trigger: true
+      - put: geh-image
+        params:
+          build: geh-repo
+          tag_as_latest: true
+
+  - name: build-geh-release
+    plan:
+      - get: studio-ci
+      - get: geh-release
+        trigger: true
+        params:
+          include_source_tarball: true
+      - task: untar-release
+        file: studio-ci/docker-images/tasks/untar-release.yml
+        input_mapping: {release: geh-release}
+        output_mapping: {source: geh-source}
+      - put: geh-image
+        params:
+          build: geh-source
+          tag_file: geh-release/tag
 
   ### GraphQL
   - name: build-graphql-latest
