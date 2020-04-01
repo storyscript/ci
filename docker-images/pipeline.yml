@@ -27,6 +27,27 @@ resources:
       username: {{dockerhub-username}}
       password: {{dockerhub-password}}
 
+  ### Creds
+  - name: creds-release
+    type: github-release
+    source:
+      owner: storyscript
+      repository: creds
+      access_token: {{storyscript-infra-access-token}}
+
+  - name: creds-repo
+    type: git
+    source:
+      uri: git@github.com:storyscript/creds.git
+      private_key: ((storyscript-infra-ssh-key))
+
+  - name: creds-image
+    type: docker-image
+    source:
+      repository: storyscript/creds
+      username: {{dockerhub-username}}
+      password: {{dockerhub-password}}
+
   ### GraphQL
   - name: graphql-release
     type: github-release
@@ -211,28 +232,6 @@ resources:
       username: {{dockerhub-username}}
       password: {{dockerhub-password}}
 
-  ### Creds
-  - name: creds-release
-    type: github-release
-    source:
-      owner: storyscript
-      repository: creds
-      access_token: {{storyscript-infra-access-token}}
-
-  - name: creds-repo
-    type: git
-    source:
-      uri: git@github.com:storyscript/creds.git
-      private_key: ((storyscript-infra-ssh-key))
-
-  - name: creds-image
-    type: docker-image
-    source:
-      repository: storyscript/creds
-      username: {{dockerhub-username}}
-      password: {{dockerhub-password}}
-
-
 jobs:
   ### Auth
   - name: build-auth-latest
@@ -259,6 +258,32 @@ jobs:
         params:
           build: auth-source
           tag_file: auth-release/tag
+
+  ### Creds
+  - name: build-creds-latest
+    plan:
+      - get: creds-repo
+        trigger: true
+      - put: creds-image
+        params:
+          build: creds-repo
+          tag_as_latest: true
+
+  - name: build-creds-release
+    plan:
+      - get: studio-ci
+      - get: creds-release
+        trigger: true
+        params:
+          include_source_tarball: true
+      - task: untar-release
+        file: studio-ci/docker-images/tasks/untar-release.yml
+        input_mapping: {release: creds-release}
+        output_mapping: {source: creds-source}
+      - put: creds-image
+        params:
+          build: creds-source
+          tag_file: creds-release/tag
 
   ### GraphQL
   - name: build-graphql-latest
@@ -481,29 +506,3 @@ jobs:
         params:
           build: worker-source
           tag_file: worker-release/tag
-
-  ### Creds
-  - name: build-creds-latest
-    plan:
-      - get: creds-repo
-        trigger: true
-      - put: creds-image
-        params:
-          build: creds-repo
-          tag_as_latest: true
-
-  - name: build-creds-release
-    plan:
-      - get: studio-ci
-      - get: creds-release
-        trigger: true
-        params:
-          include_source_tarball: true
-      - task: untar-release
-        file: studio-ci/docker-images/tasks/untar-release.yml
-        input_mapping: {release: creds-release}
-        output_mapping: {source: creds-source}
-      - put: creds-image
-        params:
-          build: creds-source
-          tag_file: creds-release/tag
