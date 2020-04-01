@@ -15,12 +15,12 @@ lb_ip="$(jq -r .load_balancer_ip < "${terraform_dir}/metadata")"
 router_ip="$(jq -r .router_ip < "${terraform_dir}/metadata")"
 db_ip="$(jq -r .database_ip < "${terraform_dir}/metadata")"
 
-github_client_id="$(jq -r github.client_id < "${apps_dir}/metadata")"
-github_client_secret="$(jq -r github.client_secret < "${apps_dir}/metadata")"
+github_client_id="$(jq -r .github.client_id < "${apps_dir}/metadata")"
+github_client_secret="$(jq -r .github.client_secret < "${apps_dir}/metadata")"
 
-slack_client_id="$(jq -r slack.client_id < "${apps_dir}/metadata")"
-slack_client_secret="$(jq -r slack.client_secret < "${apps_dir}/metadata")"
-slack_signing_secret="$(jq -r slack.signing_secret < "${apps_dir}/metadata")"
+slack_client_id="$(jq -r .slack.client_id < "${apps_dir}/metadata")"
+slack_client_secret="$(jq -r .slack.client_secret < "${apps_dir}/metadata")"
+slack_signing_secret="$(jq -r .slack.signing_secret < "${apps_dir}/metadata")"
 
 google_service_account_key="$(jq -r .service_account_key < "${terraform_dir}/metadata")"
 
