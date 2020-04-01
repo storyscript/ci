@@ -47,12 +47,12 @@ resources:
       uri: git@github.com:williammartin/dev-platform-pool.git
       pool: building-dev-platforms
       private_key: ((dev_platform_pool_deploy_key))
-  - name: github-apps-pool
+  - name: apps-pool
     type: pool
     source:
       branch: master
       uri: git@github.com:williammartin/dev-platform-pool.git
-      pool: github-apps
+      pool: apps
       private_key: ((dev_platform_pool_deploy_key))
   - name: pool-repo
     type: git
@@ -83,15 +83,15 @@ jobs:
         - get: create-dev-platforms-trigger
           trigger: true
       - do:
-        - put: github-apps-pool
+        - put: apps-pool
           params:
             acquire: true
         - put: building-pool
           params:
-            add_claimed: github-apps-pool/
+            add_claimed: apps-pool/
         - put: platform-terraform
           params:
-            env_name_file: github-apps-pool/name
+            env_name_file: apps-pool/name
             delete_on_failure: true
             terraform_source: platform-terraform-source/
             vars: &terraform-vars
@@ -114,13 +114,11 @@ jobs:
         - task: generate-helm-values
           file: studio-ci/common-tasks/generate-helm-values.yml
           input_mapping:
-            github-credentials: github-apps-pool
+            app-credentials: apps-pool
           params:
             DOMAIN: storyscript-ci.com
             APPS_DOMAIN: storyscriptapp-ci.com
             WOLFRAM_APP_ID: ((wolfram_app_id))
-            SLACK_CLIENT_ID: ((slack_client_id))
-            SLACK_CLIENT_SECRET: ((slack_client_secret))
         - task: helm-install-storyscript
           file: studio-ci/common-tasks/helm-upgrade-storyscript.yml
           params:
@@ -136,20 +134,20 @@ jobs:
             add: platform-terraform/
         - put: building-pool
           params:
-            remove: github-apps-pool/
+            remove: apps-pool/
         on_failure:
           do:
             - put: platform-terraform
               params:
                 action: destroy
-                env_name_file: github-apps-pool/name
+                env_name_file: apps-pool/name
                 terraform_source: platform-terraform-source/
                 vars: *terraform-vars
               get_params:
                 action: destroy
-            - put: github-apps-pool
+            - put: apps-pool
               params:
-                release: github-apps-pool/
+                release: apps-pool/
             - put: building-pool
               params:
                 remove: building-pool/
@@ -172,7 +170,7 @@ jobs:
             vars: *terraform-vars
           get_params:
             action: destroy
-        - put: github-apps-pool
+        - put: apps-pool
           params:
             release: broken-pool/
         - put: broken-pool

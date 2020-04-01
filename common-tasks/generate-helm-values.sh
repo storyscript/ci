@@ -3,7 +3,7 @@
 # INPUTS
 workspace_dir=$(pwd)
 terraform_dir="${workspace_dir}/platform-terraform"
-github_credentials_dir="${workspace_dir}/github-credentials"
+apps_dir="${workspace_dir}/app-credentials"
 tls_certs_dir="${workspace_dir}/tls-certs"
 
 # OUTPUTS
@@ -15,14 +15,22 @@ lb_ip="$(jq -r .load_balancer_ip < "${terraform_dir}/metadata")"
 router_ip="$(jq -r .router_ip < "${terraform_dir}/metadata")"
 db_ip="$(jq -r .database_ip < "${terraform_dir}/metadata")"
 
-github_client_id="$(jq -r .client_id < "${github_credentials_dir}/metadata")"
-github_client_secret="$(jq -r .client_secret < "${github_credentials_dir}/metadata")"
+github_client_id="$(jq -r github.client_id < "${apps_dir}/metadata")"
+github_client_secret="$(jq -r github.client_secret < "${apps_dir}/metadata")"
+
+slack_client_id="$(jq -r slack.client_id < "${apps_dir}/metadata")"
+slack_client_secret="$(jq -r slack.client_secret < "${apps_dir}/metadata")"
+slack_signing_secret="$(jq -r slack.signing_secret < "${apps_dir}/metadata")"
 
 google_service_account_key="$(jq -r .service_account_key < "${terraform_dir}/metadata")"
 
 cat > "${helm_dir}/values.yml" <<EOF
 domain: ${name}.${DOMAIN}
 appsDomain: ${name}.${APPS_DOMAIN}
+
+geh:
+  image: storyscript/geh:latest
+  slack_signing_key: ${slack_signing_secret}
 
 router:
   image: storyscript/router:latest
@@ -80,6 +88,6 @@ creds:
     client_id: ${github_client_id}
     client_secret: ${github_client_secret}
   slack:
-    client_id: ${SLACK_CLIENT_ID}
-    client_secret: ${SLACK_CLIENT_SECRET}
+    client_id: ${slack_client_id}
+    client_secret: ${slack_client_secret}
 EOF
