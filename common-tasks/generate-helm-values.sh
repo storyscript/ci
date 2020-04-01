@@ -89,6 +89,6 @@ $(echo -n "${google_service_account_key}" | awk '{printf "      %s\n", $0}')
     client_id: ${github_client_id}
     client_secret: ${github_client_secret}
   slack:
-    client_id: ${slack_client_id}
+    client_id: "${slack_client_id}"
     client_secret: ${slack_client_secret}
 EOF
