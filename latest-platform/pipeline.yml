@@ -150,6 +150,7 @@ jobs:
           GITHUB_CLIENT_SECRET: ((github.client_secret))
           SLACK_CLIENT_ID: ((slack.client_id))
           SLACK_CLIENT_SECRET: ((slack.client_secret))
+          SLACK_SIGNING_SECRET: ((slack.signing_secret))
       - task: generate-helm-values
         file: studio-ci/common-tasks/generate-helm-values.yml
         input_mapping:
