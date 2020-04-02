@@ -143,11 +143,13 @@ jobs:
         params:
           TLS_FULL_CHAIN: ((tls.fullchain))
           TLS_PRIV_KEY: ((tls.privkey))
-      - task: generate-github-credentials
-        file: studio-ci/latest-platform/tasks/generate-github-credentials.yml
+      - task: generate-app-credentials
+        file: studio-ci/latest-platform/tasks/generate-app-credentials.yml
         params:
           GITHUB_CLIENT_ID: ((github.client_id))
           GITHUB_CLIENT_SECRET: ((github.client_secret))
+          SLACK_CLIENT_ID: ((slack.client_id))
+          SLACK_CLIENT_SECRET: ((slack.client_secret))
       - task: generate-helm-values
         file: studio-ci/common-tasks/generate-helm-values.yml
         input_mapping:
@@ -156,8 +158,6 @@ jobs:
           DOMAIN: storyscript-ci.com
           APPS_DOMAIN: storyscriptapp-ci.com
           WOLFRAM_APP_ID: ((wolfram_app_id))
-          SLACK_CLIENT_ID: ((slack_client_id))
-          SLACK_CLIENT_SECRET: ((slack_client_secret))
       - task: generate-kubeconfig
         file: studio-ci/common-tasks/generate-kubeconfig.yml
         input_mapping:
