@@ -29,34 +29,13 @@ domain: ${name}.${DOMAIN}
 appsDomain: ${name}.${APPS_DOMAIN}
 
 geh:
-  image: storyscript/geh:latest
   slack_signing_key: ${slack_signing_secret}
 
 router:
-  image: storyscript/router:latest
   loadBalancerIP: ${router_ip}
 
 runtime:
-  image: storyscript/runtime:latest
   wolfram_app_id: ${WOLFRAM_APP_ID}
-
-worker:
-  image: storyscript/worker:latest
-
-http:
-  image: storyscript/http:latest
-
-schema:
-  image: storyscript/schema:latest
-
-studio:
-  image: storyscript/studio:latest
-
-graphql:
-  image: storyscript/graphql:latest
-
-sls:
-  image: storyscript/sls:latest
 
 postgresql:
   create: false
@@ -70,7 +49,6 @@ nginx-ingress:
       loadBalancerIP: ${lb_ip}
 
 auth:
-  image: storyscript/auth:latest
   github:
     client_id: ${github_client_id}
     client_secret: ${github_client_secret}
