@@ -16,5 +16,5 @@ EOF
 
 gcloud auth activate-service-account --key-file="${account_file}"
 
-gcloud secrets list --filter="labels.env:${name}" --format="json" | jq ".[] | .name" | \
+gcloud secrets list --filter="labels.env:${name}" --format="value(name)" | \
 xargs -I secret_name gcloud secrets delete secret_name --quiet
