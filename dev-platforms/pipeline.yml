@@ -176,6 +176,10 @@ jobs:
         - put: broken-pool
           params:
             remove: broken-pool/
+        - task: delete-gcloud-secrets
+          file: studio-ci/dev-platforms/tasks/delete-gcloud-secrets.yml
+          params:
+            ENV_NAME_FILE: broken-pool/name
         on_failure:
           put: broken-pool
           params:
