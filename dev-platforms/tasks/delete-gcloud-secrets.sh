@@ -2,10 +2,11 @@
 
 set -Eeuo pipefail
 
+# INPUTS
 workspace_dir=$(pwd)
+broken_pool_dir="${workspace_dir}/broken-pool"
 
-# shellcheck disable=SC2154
-env=$(cat "${ENV_NAME_FILE}")
+name=$(cat "${broken_pool_dir}/name")
 
 account_file=${workspace_dir}/account.json
 
@@ -15,5 +16,5 @@ EOF
 
 gcloud auth activate-service-account --key-file="${account_file}"
 
-gcloud secrets list --filter="labels.env:${env}" --format="json" | jq ".[] | .name" | \
+gcloud secrets list --filter="labels.env:${name}" --format="json" | jq ".[] | .name" | \
 xargs -I secret_name gcloud secrets delete secret_name --quiet

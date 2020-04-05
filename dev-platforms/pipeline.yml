@@ -174,7 +174,6 @@ jobs:
           file: studio-ci/dev-platforms/tasks/delete-gcloud-secrets.yml
           params:
             GCP_CREDENTIALS_JSON: ((gcp_credentials_json))
-            ENV_NAME_FILE: broken-pool/name
         - put: apps-pool
           params:
             release: broken-pool/
