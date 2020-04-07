@@ -126,6 +126,7 @@ jobs:
         - try:
             task: whitelist-team
             file: studio-ci/common-tasks/whitelist-team.yml
+            timeout: 30s
             params:
               STORYSCRIPT_INFRA_PASSWORD: ((storyscript-infra-password))
               AUTH_ALLOWLIST_TOKEN: ((auth-allowlist-token))

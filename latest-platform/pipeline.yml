@@ -170,6 +170,7 @@ jobs:
       - try:
           task: whitelist-team
           file: studio-ci/common-tasks/whitelist-team.yml
+          timeout: 30s
           input_mapping:
             platform-terraform: latest-tf-infrastructure
           params:
