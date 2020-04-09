@@ -79,6 +79,13 @@ resources:
       username: {{dockerhub-username}}
       password: {{dockerhub-password}}
 
+  - name: creds-image
+    type: docker-image
+    source:
+      repository: storyscript/creds
+      username: {{dockerhub-username}}
+      password: {{dockerhub-password}}
+
   - name: wolfram-image
     type: docker-image
     source:
@@ -104,6 +111,8 @@ jobs:
       - get: sls-image
         trigger: true
       - get: studio-image
+        trigger: true
+      - get: creds-image
         trigger: true
       - get: latest-tf-infrastructure
       - get: wolfram-image
