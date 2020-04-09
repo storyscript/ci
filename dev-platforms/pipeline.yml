@@ -117,7 +117,6 @@ jobs:
         - put: platform-terraform
           params:
             env_name_file: apps-pool/name
-            delete_on_failure: true
             terraform_source: platform-terraform-source/
             vars: &terraform-vars
               credentials: ((gcp_credentials_json))
