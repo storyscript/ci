@@ -527,7 +527,7 @@ jobs:
       - put: studio-image
         params:
           build: studio-source
-          dockerfile: studio-repo/.docker/Dockerfile.docker
+          dockerfile: studio-source/.docker/Dockerfile.docker
           tag_file: studio-release/tag
 
   ### Worker
