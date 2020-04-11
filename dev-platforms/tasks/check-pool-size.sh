@@ -6,6 +6,7 @@ set -eu
 : "${MIN_UNCLAIMED_COUNT:?}"
 : "${POOL_NAME:="dev-platforms"}"
 : "${BUILDING_POOL_NAME:="building-dev-platforms"}"
+: "${AVAILABLE_POOL_NAME:="apps"}"
 : "${GIT_USERNAME:="Storyscript CI"}"
 : "${GIT_EMAIL:="ci@storyscript.io"}"
 
@@ -29,7 +30,10 @@ pushd "${output_dir}" > /dev/null
   env_count=$((ready_count + building_count))
   echo "Total count: ${env_count}"
 
-  if [ "${env_count}" -lt "${MIN_UNCLAIMED_COUNT}" ]; then
+  available_count="$(find "${AVAILABLE_POOL_NAME}/unclaimed" -not -path '*/\.*' -type f | wc -l)"
+  echo "Available apps: ${available_count}"
+
+  if [ "${env_count}" -lt "${MIN_UNCLAIMED_COUNT}" ] && [ "${available_count}" -gt 0 ]; then
     echo "Fewer than ${MIN_UNCLAIMED_COUNT} dev platforms, going to trigger creation"
     # The create-dev-platform job watches this file for changes
     date +%s > .trigger-dev-platforms-create
