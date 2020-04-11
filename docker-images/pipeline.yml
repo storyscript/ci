@@ -510,7 +510,7 @@ jobs:
       - put: studio-image
         params:
           build: studio-repo
-          dockerfile: .docker/Dockerfile.docker
+          dockerfile: studio-repo/.docker/Dockerfile.docker
           tag_as_latest: true
 
   - name: build-studio-release
@@ -527,7 +527,7 @@ jobs:
       - put: studio-image
         params:
           build: studio-source
-          dockerfile: .docker/Dockerfile.docker
+          dockerfile: studio-repo/.docker/Dockerfile.docker
           tag_file: studio-release/tag
 
   ### Worker
