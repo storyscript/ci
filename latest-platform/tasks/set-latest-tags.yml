@@ -1,0 +1,17 @@
+---
+platform: linux
+
+image_resource:
+  type: docker-image
+  source:
+    repository: mikefarah/yq
+
+inputs:
+  - name: studio-ci
+  - name: helmconfig
+
+outputs:
+  - name: latest-helmconfig
+
+run:
+  path: studio-ci/latest-platform/tasks/set-latest-tags.sh

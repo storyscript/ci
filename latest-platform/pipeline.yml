@@ -168,12 +168,16 @@ jobs:
           DOMAIN: storyscript-ci.com
           APPS_DOMAIN: storyscriptapp-ci.com
           WOLFRAM_APP_ID: ((wolfram_app_id))
+      - task: set-latest-tags
+        file: studio-ci/latest-platform/tasks/set-latest-tags.yml
       - task: generate-kubeconfig
         file: studio-ci/common-tasks/generate-kubeconfig.yml
         input_mapping:
           platform-terraform: latest-tf-infrastructure
       - task: helm-upgrade-storyscript
         file: studio-ci/common-tasks/helm-upgrade-storyscript.yml
+        input_mapping:
+          helmconfig: latest-helmconfig
         params:
           GCP_CREDENTIALS_JSON: ((gcp_credentials_json))
       - try:
