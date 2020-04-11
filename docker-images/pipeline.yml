@@ -211,6 +211,27 @@ resources:
       username: {{dockerhub-username}}
       password: {{dockerhub-password}}
 
+  ### Studio
+  - name: studio-release
+    type: github-release
+    source:
+      owner: storyscript
+      repository: studio
+      access_token: {{storyscript-infra-access-token}}
+
+  - name: studio-repo
+    type: git
+    source:
+      uri: git@github.com:storyscript/studio.git
+      private_key: ((storyscript-infra-ssh-key))
+
+  - name: studio-image
+    type: docker-image
+    source:
+      repository: storyscript/studio
+      username: {{dockerhub-username}}
+      password: {{dockerhub-password}}
+
   ### Worker
   - name: worker-release
     type: github-release
@@ -480,6 +501,32 @@ jobs:
           build: sls-source
           build_args_file: sls-tag-env-var/tag-env-var.json
           tag_file: sls-release/tag
+
+  ### Studio
+  - name: build-studio-latest
+    plan:
+      - get: studio-repo
+        trigger: true
+      - put: studio-image
+        params:
+          build: studio-repo
+          tag_as_latest: true
+
+  - name: build-studio-release
+    plan:
+      - get: studio-ci
+      - get: studio-release
+        trigger: true
+        params:
+          include_source_tarball: true
+      - task: untar-release
+        file: studio-ci/docker-images/tasks/untar-release.yml
+        input_mapping: {release: studio-release}
+        output_mapping: {source: studio-source}
+      - put: studio-image
+        params:
+          build: studio-source
+          tag_file: studio-release/tag
 
   ### Worker
   - name: build-worker-latest
