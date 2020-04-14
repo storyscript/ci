@@ -13,5 +13,7 @@ EOF
 export GOOGLE_APPLICATION_CREDENTIALS=${account_file}
 export KUBECONFIG=${kubeconfig_dir}/kubeconfig.yml
 
+version=$(helm list -o json | jq -r ".[].chart" | grep -o '[^-]*$')
+
 helm repo add storyscript https://storyscript.github.io/storyscript-chart
-helm upgrade --recreate-pods --reuse-values storyscript storyscript/storyscript --debug
+helm upgrade storyscript storyscript/storyscript --version "$version" --recreate-pods --reuse-values --debug
