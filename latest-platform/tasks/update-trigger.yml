@@ -1,0 +1,23 @@
+---
+platform: linux
+
+image_resource:
+  type: docker-image
+  source:
+    repository: cloudfoundry/capi
+    tag: bosh-lite
+
+inputs:
+  - name: studio-ci
+  - name: env-pool
+
+outputs:
+  - name: updated-env-pool
+
+run:
+  path: studio-ci/latest-platform/tasks/update-trigger.sh
+
+params:
+  TRIGGER_NAME: ""
+  GIT_USERNAME: ""
+  GIT_EMAIL: ""

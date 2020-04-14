@@ -24,6 +24,31 @@ resources:
       uri: git@github.com:storyscript/storyscript-platform-terraform.git
       private_key: ((storyscript-infra-ssh-key))
 
+  - name: helm-chart-version
+    type: git
+    source:
+      branch: master
+      uri: git@github.com:storyscript/storyscript-chart.git
+      private_key: ((storyscript-infra-ssh-key))
+      paths:
+        - index.yaml
+
+  - name: pool-repo
+    type: git
+    source:
+      branch: master
+      uri: git@github.com:williammartin/dev-platform-pool.git
+      private_key: ((dev_platform_pool_deploy_key))
+
+  - name: latest-platform-chart-trigger
+    type: git
+    source:
+      branch: master
+      uri: git@github.com:williammartin/dev-platform-pool.git
+      private_key: ((dev_platform_pool_deploy_key))
+      paths:
+        - .trigger-latest-platform-chart # updated by update-platform
+
   - name: studio-ci
     type: git
     source:
@@ -127,26 +152,16 @@ jobs:
         params:
           GCP_CREDENTIALS_JSON: ((gcp_credentials_json))
 
-- name: update-platform
+- name: update-chart
   plan:
     - in_parallel:
       - get: studio-ci
-      - get: platform-terraform-source
+      - get: latest-tf-infrastructure
+      - get: helm-chart-version
+        trigger: true
+      - get: latest-platform-chart-trigger
         trigger: true
     - do:
-      - put: latest-tf-infrastructure
-        params:
-          terraform_source: platform-terraform-source/
-          vars: &terraform-vars
-            credentials: ((gcp_credentials_json))
-            project: storyscript-ci
-            region: europe-west4
-            dns_zone_name: storyscript-ci
-            domain: storyscript-ci.com
-            apps_dns_zone_name: storyscriptapp-ci
-            apps_domain: storyscriptapp-ci.com
-            db_username: storyscript
-            db_password: storyscript
       - task: generate-tls-certs
         file: studio-ci/common-tasks/generate-tls-certs.yml
         params:
@@ -189,3 +204,35 @@ jobs:
           params:
             STORYSCRIPT_INFRA_PASSWORD: ((storyscript-infra-password))
             AUTH_ALLOWLIST_TOKEN: ((auth-allowlist-token))
+
+- name: update-platform
+  plan:
+    - in_parallel:
+      - get: studio-ci
+      - get: pool-repo
+      - get: platform-terraform-source
+        trigger: true
+    - do:
+      - put: latest-tf-infrastructure
+        params:
+          terraform_source: platform-terraform-source/
+          vars: &terraform-vars
+            credentials: ((gcp_credentials_json))
+            project: storyscript-ci
+            region: europe-west4
+            dns_zone_name: storyscript-ci
+            domain: storyscript-ci.com
+            apps_dns_zone_name: storyscriptapp-ci
+            apps_domain: storyscriptapp-ci.com
+            db_username: storyscript
+            db_password: storyscript
+      - task: update-latest-platform-chart-trigger
+        file: studio-ci/latest-platform/tasks/update-trigger.yml
+        input_mapping:
+          env-pool: pool-repo
+        params:
+          TRIGGER_NAME: .trigger-latest-platform-chart
+      - put: pool-repo
+        params:
+          repository: updated-env-pool
+          rebase: true
