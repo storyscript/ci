@@ -27,6 +27,48 @@ resources:
       username: {{dockerhub-username}}
       password: {{dockerhub-password}}
 
+  ### Creds
+  - name: creds-release
+    type: github-release
+    source:
+      owner: storyscript
+      repository: creds
+      access_token: {{storyscript-infra-access-token}}
+
+  - name: creds-repo
+    type: git
+    source:
+      uri: git@github.com:storyscript/creds.git
+      private_key: ((storyscript-infra-ssh-key))
+
+  - name: creds-image
+    type: docker-image
+    source:
+      repository: storyscript/creds
+      username: {{dockerhub-username}}
+      password: {{dockerhub-password}}
+
+  ### GEH
+  - name: geh-release
+    type: github-release
+    source:
+      owner: storyscript
+      repository: geh
+      access_token: {{storyscript-infra-access-token}}
+
+  - name: geh-repo
+    type: git
+    source:
+      uri: git@github.com:storyscript/geh.git
+      private_key: ((storyscript-infra-ssh-key))
+
+  - name: geh-image
+    type: docker-image
+    source:
+      repository: storyscript/geh
+      username: {{dockerhub-username}}
+      password: {{dockerhub-password}}
+
   ### GraphQL
   - name: graphql-release
     type: github-release
@@ -132,6 +174,22 @@ resources:
       username: {{dockerhub-username}}
       password: {{dockerhub-password}}
 
+  ### Schema CI
+  - name: schema-ci-repo
+    type: git
+    source:
+      uri: git@github.com:storyscript/database.git
+      paths:
+        - ci/docker/
+      private_key: ((storyscript-infra-ssh-key))
+
+  - name: schema-ci-image
+    type: docker-image
+    source:
+      repository: storyscript/schema-ci
+      username: {{dockerhub-username}}
+      password: {{dockerhub-password}}
+
   ### SLS
   - name: sls-release
     type: github-release
@@ -150,6 +208,27 @@ resources:
     type: docker-image
     source:
       repository: storyscript/sls
+      username: {{dockerhub-username}}
+      password: {{dockerhub-password}}
+
+  ### Studio
+  - name: studio-release
+    type: github-release
+    source:
+      owner: storyscript
+      repository: studio
+      access_token: {{storyscript-infra-access-token}}
+
+  - name: studio-repo
+    type: git
+    source:
+      uri: git@github.com:storyscript/studio.git
+      private_key: ((storyscript-infra-ssh-key))
+
+  - name: studio-image
+    type: docker-image
+    source:
+      repository: storyscript/studio
       username: {{dockerhub-username}}
       password: {{dockerhub-password}}
 
@@ -200,6 +279,58 @@ jobs:
         params:
           build: auth-source
           tag_file: auth-release/tag
+
+  ### Creds
+  - name: build-creds-latest
+    plan:
+      - get: creds-repo
+        trigger: true
+      - put: creds-image
+        params:
+          build: creds-repo
+          tag_as_latest: true
+
+  - name: build-creds-release
+    plan:
+      - get: studio-ci
+      - get: creds-release
+        trigger: true
+        params:
+          include_source_tarball: true
+      - task: untar-release
+        file: studio-ci/docker-images/tasks/untar-release.yml
+        input_mapping: {release: creds-release}
+        output_mapping: {source: creds-source}
+      - put: creds-image
+        params:
+          build: creds-source
+          tag_file: creds-release/tag
+
+  ### GEH
+  - name: build-geh-latest
+    plan:
+      - get: geh-repo
+        trigger: true
+      - put: geh-image
+        params:
+          build: geh-repo
+          tag_as_latest: true
+
+  - name: build-geh-release
+    plan:
+      - get: studio-ci
+      - get: geh-release
+        trigger: true
+        params:
+          include_source_tarball: true
+      - task: untar-release
+        file: studio-ci/docker-images/tasks/untar-release.yml
+        input_mapping: {release: geh-release}
+        output_mapping: {source: geh-source}
+      - put: geh-image
+        params:
+          build: geh-source
+          tag_file: geh-release/tag
 
   ### GraphQL
   - name: build-graphql-latest
@@ -330,6 +461,16 @@ jobs:
         params:
           build: schema-source
           tag_file: schema-release/tag
+
+  - name: build-schema-ci-latest
+    plan:
+      - get: schema-ci-repo
+        trigger: true
+      - put: schema-ci-image
+        params:
+          build: schema-ci-repo/ci/docker
+          tag_as_latest: true
+
   ### SLS
   - name: build-sls-latest
     plan:
@@ -360,6 +501,34 @@ jobs:
           build: sls-source
           build_args_file: sls-tag-env-var/tag-env-var.json
           tag_file: sls-release/tag
+
+  ### Studio
+  - name: build-studio-latest
+    plan:
+      - get: studio-repo
+        trigger: true
+      - put: studio-image
+        params:
+          build: studio-repo
+          dockerfile: studio-repo/.docker/Dockerfile.docker
+          tag_as_latest: true
+
+  - name: build-studio-release
+    plan:
+      - get: studio-ci
+      - get: studio-release
+        trigger: true
+        params:
+          include_source_tarball: true
+      - task: untar-release
+        file: studio-ci/docker-images/tasks/untar-release.yml
+        input_mapping: {release: studio-release}
+        output_mapping: {source: studio-source}
+      - put: studio-image
+        params:
+          build: studio-source
+          dockerfile: studio-source/.docker/Dockerfile.docker
+          tag_file: studio-release/tag
 
   ### Worker
   - name: build-worker-latest

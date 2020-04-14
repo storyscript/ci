@@ -1,0 +1,47 @@
+router:
+  image:
+    tag: latest
+
+schema:
+  image:
+    tag: latest
+
+graphql:
+  image:
+    tag: latest
+
+auth:
+  image:
+    tag: latest
+
+creds:
+  image:
+    tag: latest
+
+geh:
+  image:
+    tag: latest
+
+sls:
+  image:
+    tag: latest
+
+studio:
+  image:
+    tag: latest
+
+runtime:
+  image:
+    tag: latest
+
+worker:
+  image:
+    tag: latest
+
+oauthproxy:
+  image:
+    tag: latest
+
+http:
+  image:
+    tag: latest

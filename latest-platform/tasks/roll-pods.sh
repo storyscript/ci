@@ -1,8 +1,7 @@
 #!/bin/bash
 
 # INPUTS
-script_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-workspace_dir="$( cd "${script_dir}/../../../" && pwd )"
+workspace_dir=$(pwd)
 kubeconfig_dir="${workspace_dir}/kubeconfig"
 
 account_file=${workspace_dir}/account.json

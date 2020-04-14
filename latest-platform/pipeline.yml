@@ -17,10 +17,17 @@ resources:
         prefix: terraform/state
         credentials: ((gcp_credentials_json))
 
+  - name: platform-terraform-source
+    type: git
+    source:
+      branch: master
+      uri: git@github.com:storyscript/storyscript-platform-terraform.git
+      private_key: ((storyscript-infra-ssh-key))
+
   - name: studio-ci
     type: git
     source:
-      branch: latest-platform
+      branch: master
       uri: https://github.com/storyscriptinc/ci.git
 
   - name: schema-image
@@ -72,6 +79,20 @@ resources:
       username: {{dockerhub-username}}
       password: {{dockerhub-password}}
 
+  - name: creds-image
+    type: docker-image
+    source:
+      repository: storyscript/creds
+      username: {{dockerhub-username}}
+      password: {{dockerhub-password}}
+
+  - name: wolfram-image
+    type: docker-image
+    source:
+      repository: storyscript/wolfram
+      username: {{dockerhub-username}}
+      password: {{dockerhub-password}}
+
 jobs:
 - name: roll-pods
   plan:
@@ -91,11 +112,78 @@ jobs:
         trigger: true
       - get: studio-image
         trigger: true
+      - get: creds-image
+        trigger: true
       - get: latest-tf-infrastructure
     - do:
       - task: generate-kubeconfig
-        file: studio-ci/latest-platform/tasks/generate-kubeconfig.yml
+        file: studio-ci/common-tasks/generate-kubeconfig.yml
+        input_mapping:
+          platform-terraform: latest-tf-infrastructure
       - task: roll-pods
         file: studio-ci/latest-platform/tasks/roll-pods.yml
         params:
           GCP_CREDENTIALS_JSON: ((gcp_credentials_json))
+
+- name: update-platform
+  plan:
+    - in_parallel:
+      - get: studio-ci
+      - get: platform-terraform-source
+        trigger: true
+    - do:
+      - put: latest-tf-infrastructure
+        params:
+          terraform_source: platform-terraform-source/
+          vars: &terraform-vars
+            credentials: ((gcp_credentials_json))
+            project: storyscript-ci
+            region: europe-west4
+            dns_zone_name: storyscript-ci
+            domain: storyscript-ci.com
+            apps_dns_zone_name: storyscriptapp-ci
+            apps_domain: storyscriptapp-ci.com
+            db_username: storyscript
+            db_password: storyscript
+      - task: generate-tls-certs
+        file: studio-ci/common-tasks/generate-tls-certs.yml
+        params:
+          TLS_FULL_CHAIN: ((tls.fullchain))
+          TLS_PRIV_KEY: ((tls.privkey))
+      - task: generate-app-credentials
+        file: studio-ci/latest-platform/tasks/generate-app-credentials.yml
+        params:
+          GITHUB_CLIENT_ID: ((github.client_id))
+          GITHUB_CLIENT_SECRET: ((github.client_secret))
+          SLACK_CLIENT_ID: ((slack.client_id))
+          SLACK_CLIENT_SECRET: ((slack.client_secret))
+          SLACK_SIGNING_SECRET: ((slack.signing_secret))
+      - task: generate-helm-values
+        file: studio-ci/common-tasks/generate-helm-values.yml
+        input_mapping:
+          platform-terraform: latest-tf-infrastructure
+        params:
+          DOMAIN: storyscript-ci.com
+          APPS_DOMAIN: storyscriptapp-ci.com
+          WOLFRAM_APP_ID: ((wolfram_app_id))
+      - task: set-latest-tags
+        file: studio-ci/latest-platform/tasks/set-latest-tags.yml
+      - task: generate-kubeconfig
+        file: studio-ci/common-tasks/generate-kubeconfig.yml
+        input_mapping:
+          platform-terraform: latest-tf-infrastructure
+      - task: helm-upgrade-storyscript
+        file: studio-ci/common-tasks/helm-upgrade-storyscript.yml
+        input_mapping:
+          helmconfig: latest-helmconfig
+        params:
+          GCP_CREDENTIALS_JSON: ((gcp_credentials_json))
+      - try:
+          task: whitelist-team
+          file: studio-ci/common-tasks/whitelist-team.yml
+          timeout: 2m
+          input_mapping:
+            platform-terraform: latest-tf-infrastructure
+          params:
+            STORYSCRIPT_INFRA_PASSWORD: ((storyscript-infra-password))
+            AUTH_ALLOWLIST_TOKEN: ((auth-allowlist-token))

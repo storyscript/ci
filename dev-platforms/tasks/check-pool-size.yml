@@ -19,6 +19,8 @@ run:
 
 params:
   POOL_NAME: ""
+  BUILDING_POOL_NAME: ""
+  AVAILABLE_POOL_NAME: ""
   MIN_UNCLAIMED_COUNT: ""
   GIT_USERNAME: ""
   GIT_EMAIL: ""
