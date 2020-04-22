@@ -59,6 +59,10 @@ oauthproxy:
 http:
   image:
     tag: latest
+
+compiler:
+  image:
+    tag: latest
 EOF
 
 yq merge "${helmconfig_dir}/values.yml" "${latest_tags_file}" > "${latest_helmconfig_dir}/values.yml"
