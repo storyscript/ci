@@ -69,6 +69,13 @@ resources:
       username: {{dockerhub-username}}
       password: {{dockerhub-password}}
 
+  - name: router-image
+    type: docker-image
+    source:
+      repository: storyscript/router
+      username: {{dockerhub-username}}
+      password: {{dockerhub-password}}
+
   - name: runtime-image
     type: docker-image
     source:
@@ -83,10 +90,24 @@ resources:
       username: {{dockerhub-username}}
       password: {{dockerhub-password}}
 
+  - name: geh-image
+    type: docker-image
+    source:
+      repository: storyscript/geh
+      username: {{dockerhub-username}}
+      password: {{dockerhub-password}}
+
   - name: graphql-image
     type: docker-image
     source:
       repository: storyscript/graphql
+      username: {{dockerhub-username}}
+      password: {{dockerhub-password}}
+
+  - name: language-image
+    type: docker-image
+    source:
+      repository: storyscript/language
       username: {{dockerhub-username}}
       password: {{dockerhub-password}}
 
@@ -111,6 +132,13 @@ resources:
       username: {{dockerhub-username}}
       password: {{dockerhub-password}}
 
+  - name: worker-image
+    type: docker-image
+    source:
+      repository: storyscript/worker
+      username: {{dockerhub-username}}
+      password: {{dockerhub-password}}
+
 jobs:
 - name: roll-pods
   plan:
@@ -120,17 +148,25 @@ jobs:
         trigger: true
       - get: auth-image
         trigger: true
+      - get: router-image
+        trigger: true
       - get: runtime-image
         trigger: true
       - get: http-image
         trigger: true
+      - get: geh-image
+        trigger: true
       - get: graphql-image
+        trigger: true
+      - get: language-image
         trigger: true
       - get: sls-image
         trigger: true
       - get: studio-image
         trigger: true
       - get: creds-image
+        trigger: true
+      - get: worker-image
         trigger: true
       - get: latest-tf-infrastructure
     - do:
