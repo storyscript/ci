@@ -143,6 +143,9 @@ jobs:
             DOMAIN: storyscript-ci.com
             APPS_DOMAIN: storyscriptapp-ci.com
             WOLFRAM_APP_ID: ((wolfram_app_id))
+            FULLSTORY_ORG_ID: ((studio.fullstory_org_id))
+            INTERCOM_APP_ID: ((studio.intercom_app_id))
+            SENTRY_DSN: ((studio.sentry_dsn))
         - task: helm-install-storyscript
           file: studio-ci/common-tasks/helm-upgrade-storyscript.yml
           params:
@@ -215,6 +218,9 @@ jobs:
               DOMAIN: storyscript-ci.com
               APPS_DOMAIN: storyscriptapp-ci.com
               WOLFRAM_APP_ID: ((wolfram_app_id))
+              FULLSTORY_ORG_ID: ((studio.fullstory_org_id))
+              INTERCOM_APP_ID: ((studio.intercom_app_id))
+              SENTRY_DSN: ((studio.sentry_dsn))
           - task: generate-kubeconfig
             file: studio-ci/common-tasks/generate-kubeconfig.yml
           - task: helm-upgrade-storyscript

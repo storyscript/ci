@@ -28,6 +28,13 @@ cat > "${helm_dir}/values.yml" <<EOF
 domain: ${name}.${DOMAIN}
 appsDomain: ${name}.${APPS_DOMAIN}
 
+studio:
+  integrations:
+    intercom: ${INTERCOM_APP_ID}
+    fullstory: ${FULLSTORY_ORG_ID}
+  sentry:
+    dsn: ${SENTRY_DSN}
+
 geh:
   slack_signing_key: ${slack_signing_secret}
 

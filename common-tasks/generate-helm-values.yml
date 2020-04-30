@@ -19,6 +19,9 @@ params:
   DOMAIN: ""
   APPS_DOMAIN: ""
   WOLFRAM_APP_ID: ""
+  FULLSTORY_ORG_ID: ""
+  INTERCOM_APP_ID: ""
+  SENTRY_DSN: ""
 
 run:
   path: studio-ci/common-tasks/generate-helm-values.sh
