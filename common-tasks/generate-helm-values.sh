@@ -15,6 +15,8 @@ lb_ip="$(jq -r .load_balancer_ip < "${terraform_dir}/metadata")"
 router_ip="$(jq -r .router_ip < "${terraform_dir}/metadata")"
 db_ip="$(jq -r .database_ip < "${terraform_dir}/metadata")"
 
+github_app_id="$(jq -r .github.app_id < "${apps_dir}/metadata")"
+github_app_private_key="$(jq -r .github.app_private_key < "${apps_dir}/metadata")"
 github_client_id="$(jq -r .github.client_id < "${apps_dir}/metadata")"
 github_client_secret="$(jq -r .github.client_secret < "${apps_dir}/metadata")"
 
@@ -43,6 +45,9 @@ router:
 
 runtime:
   wolfram_app_id: ${WOLFRAM_APP_ID}
+  github_app:
+    id: ${github_app_id}
+    private_key: ${github_app_private_key}
 
 postgresql:
   create: false
