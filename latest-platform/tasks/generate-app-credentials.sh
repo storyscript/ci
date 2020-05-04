@@ -7,6 +7,8 @@ workspace_dir=$(pwd)
 app_credentials_dir="${workspace_dir}/app-credentials"
 
 jq -n \
+  --arg github_app_id "$GITHUB_APP_ID" \
+  --arg github_app_private_key "$GITHUB_APP_PRIVATE_KEY" \
   --arg github_client_id "$GITHUB_CLIENT_ID" \
   --arg github_client_secret "$GITHUB_CLIENT_SECRET" \
   --arg slack_client_id "$SLACK_CLIENT_ID" \
@@ -14,6 +16,8 @@ jq -n \
   --arg slack_signing_secret "$SLACK_SIGNING_SECRET" \
 '{
   github: {
+    app_id: $github_app_id,
+    app_private_key: $github_app_private_key,
     client_id: $github_client_id,
     client_secret: $github_client_secret
   },

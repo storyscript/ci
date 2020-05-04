@@ -197,6 +197,8 @@ jobs:
       - task: generate-app-credentials
         file: studio-ci/latest-platform/tasks/generate-app-credentials.yml
         params:
+          GITHUB_APP_ID: ((github.app_id))
+          GITHUB_APP_PRIVATE_KEY: ((github.app_private_key))
           GITHUB_CLIENT_ID: ((github.client_id))
           GITHUB_CLIENT_SECRET: ((github.client_secret))
           SLACK_CLIENT_ID: ((slack.client_id))
