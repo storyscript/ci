@@ -45,9 +45,9 @@ router:
 
 runtime:
   wolfram_app_id: ${WOLFRAM_APP_ID}
-  github_app:
-    id: ${github_app_id}
-    private_key: ${github_app_private_key}
+  github:
+    app_id: ${github_app_id}
+    app_private_key: ${github_app_private_key}
 
 postgresql:
   create: false
