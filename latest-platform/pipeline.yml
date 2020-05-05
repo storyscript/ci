@@ -45,7 +45,7 @@ resources:
       uri: git@github.com:williammartin/dev-platform-pool.git
       private_key: ((dev_platform_pool_deploy_key))
       paths:
-        - .trigger-latest-platform-update-helm # updated by update-platform
+        - .trigger-latest-platform-update-helm # updated by update-terraform
 
   - name: studio-ci
     type: git
@@ -225,7 +225,7 @@ jobs:
               STORYSCRIPT_INFRA_PASSWORD: ((storyscript-infra-password))
               AUTH_ALLOWLIST_TOKEN: ((auth-allowlist-token))
 
-- name: update-platform-terraform
+- name: update-terraform
   plan:
     - in_parallel:
       - get: studio-ci
