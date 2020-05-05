@@ -11,6 +11,8 @@ inputs:
   - name: studio-ci
   - name: kubeconfig
   - name: helmconfig
+  - name: storyscript-chart
+    optional: true
 
 params:
  GCP_CREDENTIALS_JSON: ""
