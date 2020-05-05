@@ -15,7 +15,7 @@ outputs:
   - name: updated-env-pool
 
 run:
-  path: studio-ci/latest-platform/tasks/update-trigger.sh
+  path: studio-ci/latest-platform/tasks/touch-trigger.sh
 
 params:
   TRIGGER_NAME: ""
