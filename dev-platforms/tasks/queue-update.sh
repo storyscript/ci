@@ -21,7 +21,7 @@ pushd "${output_dir}" > /dev/null
   if [ "${unclaimed_count}" -gt 0 ]; then
     git config user.name "${GIT_USERNAME}"
     git config user.email "${GIT_EMAIL}"
-    mv dev-platforms/unclaimed/* updating-dev-platforms/unclaimed/
+    git mv dev-platforms/unclaimed/* updating-dev-platforms/unclaimed/
     git commit -m "Move ${unclaimed_count} unclaimed dev-platforms to updating-dev-platforms"
   fi
 popd > /dev/null
