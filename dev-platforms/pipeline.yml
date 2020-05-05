@@ -24,12 +24,20 @@ resources:
     source:
       branch: master
       uri: https://github.com/storyscriptinc/ci.git
+
+  - name: storyscript-chart-release
+    type: github-release
+    source:
+      owner: storyscript
+      repository: storyscript-chart
+
   - name: platform-terraform-source
     type: git
     source:
       branch: master
       uri: git@github.com:storyscript/storyscript-platform-terraform.git
       private_key: ((storyscript-infra-ssh-key))
+
   - name: ready-pool
     type: pool
     source:
@@ -37,6 +45,7 @@ resources:
       uri: git@github.com:williammartin/dev-platform-pool.git
       pool: dev-platforms
       private_key: ((dev_platform_pool_deploy_key))
+
   - name: broken-pool
     type: pool
     source:
@@ -44,6 +53,7 @@ resources:
       uri: git@github.com:williammartin/dev-platform-pool.git
       pool: broken-dev-platforms
       private_key: ((dev_platform_pool_deploy_key))
+
   - name: broken-pool-trigger
     type: pool-trigger
     source:
@@ -51,6 +61,7 @@ resources:
       uri: git@github.com:williammartin/dev-platform-pool.git
       pool: broken-dev-platforms
       private_key: ((dev_platform_pool_deploy_key))
+
   - name: building-pool
     type: pool
     source:
@@ -58,6 +69,7 @@ resources:
       uri: git@github.com:williammartin/dev-platform-pool.git
       pool: building-dev-platforms
       private_key: ((dev_platform_pool_deploy_key))
+
   - name: updating-pool
     type: pool
     source:
@@ -65,6 +77,7 @@ resources:
       uri: git@github.com:williammartin/dev-platform-pool.git
       pool: updating-dev-platforms
       private_key: ((dev_platform_pool_deploy_key))
+
   - name: updating-pool-trigger
     type: pool-trigger
     source:
@@ -72,6 +85,7 @@ resources:
       uri: git@github.com:williammartin/dev-platform-pool.git
       pool: updating-dev-platforms
       private_key: ((dev_platform_pool_deploy_key))
+
   - name: apps-pool
     type: pool
     source:
@@ -79,12 +93,14 @@ resources:
       uri: git@github.com:williammartin/dev-platform-pool.git
       pool: apps
       private_key: ((dev_platform_pool_deploy_key))
+
   - name: pool-repo
     type: git
     source:
       branch: master
       uri: git@github.com:williammartin/dev-platform-pool.git
       private_key: ((dev_platform_pool_deploy_key))
+
   - name: create-dev-platforms-trigger
     type: git
     source:
@@ -93,6 +109,7 @@ resources:
       private_key: ((dev_platform_pool_deploy_key))
       paths:
         - .trigger-dev-platforms-create # updated by check-pool-size
+
   - name: 5m
     type: time
     source:
@@ -184,27 +201,12 @@ jobs:
     plan:
       - in_parallel:
         - get: studio-ci
-        - get: platform-terraform-source
         - get: updating-pool-trigger
           trigger: true
       - do:
           - put: updating-pool
             params:
               acquire: true
-          - put: platform-terraform
-            params:
-              env_name_file: updating-pool/name
-              terraform_source: platform-terraform-source/
-              vars: &terraform-vars
-                credentials: ((gcp_credentials_json))
-                project: storyscript-ci
-                region: europe-west4
-                dns_zone_name: storyscript-ci
-                domain: storyscript-ci.com
-                apps_dns_zone_name: storyscriptapp-ci
-                apps_domain: storyscriptapp-ci.com
-                db_username: storyscript
-                db_password: storyscript
           - task: generate-tls-certs
             file: studio-ci/common-tasks/generate-tls-certs.yml
             params:
@@ -289,6 +291,22 @@ jobs:
           env-pool: pool-repo
         params:
           MIN_UNCLAIMED_COUNT: 2
+      - put: pool-repo
+        params:
+          repository: updated-env-pool
+          rebase: true
+
+  - name: queue-pool-update
+    plan:
+      - in_parallel:
+        - get: studio-ci
+        - get: pool-repo
+        - get: storyscript-chart-release
+          trigger: true
+      - task: queue-update
+        file: studio-ci/dev-platforms/tasks/queue-update.yml
+        input_mapping:
+          env-pool: pool-repo
       - put: pool-repo
         params:
           repository: updated-env-pool
