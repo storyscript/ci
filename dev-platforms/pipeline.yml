@@ -30,6 +30,7 @@ resources:
     source:
       owner: storyscript
       repository: storyscript-chart
+      access_token: {{storyscript-infra-access-token}}
 
   - name: platform-terraform-source
     type: git
