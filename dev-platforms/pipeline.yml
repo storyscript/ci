@@ -177,7 +177,7 @@ jobs:
               AUTH_ALLOWLIST_TOKEN: ((auth-allowlist-token))
         - put: ready-pool
           params:
-            add: platform-terraform/
+            add: apps-pool/
         - put: building-pool
           params:
             remove: apps-pool/
