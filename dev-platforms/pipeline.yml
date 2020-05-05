@@ -202,12 +202,27 @@ jobs:
     plan:
       - in_parallel:
         - get: studio-ci
+        - get: platform-terraform-source
         - get: updating-pool-trigger
           trigger: true
       - do:
           - put: updating-pool
             params:
               acquire: true
+          - put: platform-terraform
+            params:
+              env_name_file: updating-pool/name
+              terraform_source: platform-terraform-source/
+              vars: &terraform-vars
+                credentials: ((gcp_credentials_json))
+                project: storyscript-ci
+                region: europe-west4
+                dns_zone_name: storyscript-ci
+                domain: storyscript-ci.com
+                apps_dns_zone_name: storyscriptapp-ci
+                apps_domain: storyscriptapp-ci.com
+                db_username: storyscript
+                db_password: storyscript
           - task: generate-tls-certs
             file: studio-ci/common-tasks/generate-tls-certs.yml
             params:
@@ -305,6 +320,8 @@ jobs:
       - in_parallel:
         - get: studio-ci
         - get: pool-repo
+        - get: platform-terraform-source
+          trigger: true
         - get: storyscript-chart-release
           trigger: true
       - task: queue-update
