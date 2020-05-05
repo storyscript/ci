@@ -237,6 +237,9 @@ jobs:
               params:
                 STORYSCRIPT_INFRA_PASSWORD: ((storyscript-infra-password))
                 AUTH_ALLOWLIST_TOKEN: ((auth-allowlist-token))
+          - put: ready-pool
+            params:
+              add: updating-pool/
           - put: updating-pool
             params:
               remove: updating-pool/
