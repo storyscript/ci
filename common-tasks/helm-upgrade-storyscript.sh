@@ -17,8 +17,8 @@ export KUBECONFIG=${kubeconfig_dir}/kubeconfig.yml
 
 if [ -d "${chart_source}" ];
 then
-  helm upgrade --install storyscript "${chart_source}" -f "${helm_dir}/values.yml" --debug
+  helm upgrade --install storyscript "${chart_source}" -f "${helm_dir}/values.yml" --debug --recreate-pods
 else
   helm repo add storyscript https://storyscript.github.io/storyscript-chart
-  helm upgrade --install storyscript storyscript/storyscript -f "${helm_dir}/values.yml" --debug
+  helm upgrade --install storyscript storyscript/storyscript -f "${helm_dir}/values.yml" --debug --recreate-pods
 fi
