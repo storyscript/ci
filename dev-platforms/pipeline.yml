@@ -129,6 +129,10 @@ jobs:
         - put: apps-pool
           params:
             acquire: true
+        - task: load-env-creds
+          file: studio-ci/dev-platforms/tasks/load-env-creds.yml
+          params:
+            GCP_CREDENTIALS_JSON: ((gcp_credentials_json))
         - put: building-pool
           params:
             add_claimed: apps-pool/
@@ -155,8 +159,6 @@ jobs:
             TLS_PRIV_KEY: ((tls.privkey))
         - task: generate-helm-values
           file: studio-ci/common-tasks/generate-helm-values.yml
-          input_mapping:
-            app-credentials: apps-pool
           params:
             DOMAIN: storyscript-ci.com
             APPS_DOMAIN: storyscriptapp-ci.com
@@ -209,6 +211,10 @@ jobs:
           - put: updating-pool
             params:
               acquire: true
+          - task: load-env-creds
+            file: studio-ci/dev-platforms/tasks/load-env-creds.yml
+            params:
+              GCP_CREDENTIALS_JSON: ((gcp_credentials_json))
           - put: platform-terraform
             params:
               env_name_file: updating-pool/name
@@ -230,8 +236,6 @@ jobs:
               TLS_PRIV_KEY: ((tls.privkey))
           - task: generate-helm-values
             file: studio-ci/common-tasks/generate-helm-values.yml
-            input_mapping:
-              app-credentials: updating-pool
             params:
               DOMAIN: storyscript-ci.com
               APPS_DOMAIN: storyscriptapp-ci.com

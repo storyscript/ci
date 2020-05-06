@@ -9,7 +9,7 @@ image_resource:
 inputs:
   - name: studio-ci
   - name: platform-terraform
-  - name: app-credentials
+  - name: env-creds
   - name: tls-certs
 
 outputs:

@@ -10,7 +10,7 @@ inputs:
   - name: studio-ci
 
 outputs:
-  - name: app-credentials
+  - name: env-creds
 
 params:
   GITHUB_APP_ID: ""
@@ -22,4 +22,4 @@ params:
   SLACK_SIGNING_SECRET: ""
 
 run:
-  path: studio-ci/latest-platform/tasks/generate-app-credentials.sh
+  path: studio-ci/latest-platform/tasks/generate-env-creds.sh

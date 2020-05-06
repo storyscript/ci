@@ -4,7 +4,7 @@
 workspace_dir=$(pwd)
 
 # OUTPUTS
-app_credentials_dir="${workspace_dir}/app-credentials"
+output_dir="${workspace_dir}/env-creds"
 
 jq -n \
   --arg github_app_id "$GITHUB_APP_ID" \
@@ -26,6 +26,4 @@ jq -n \
     client_secret: $slack_client_secret,
     signing_secret: $slack_signing_secret
   }
-}' > "${app_credentials_dir}"/metadata
-# NOTE: since this file is used in a later task which is shared with latest-platform,
-# it is named "metadata" here to match the name used by pool-resource in latest-platform
+}' > "${output_dir}/latest.json"

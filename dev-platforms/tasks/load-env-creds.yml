@@ -1,0 +1,19 @@
+---
+platform: linux
+
+image_resource:
+  type: docker-image
+  source:
+    repository: google/cloud-sdk
+
+inputs:
+  - name: studio-ci
+
+outputs:
+  - name: env-creds
+
+run:
+  path: studio-ci/dev-platforms/tasks/load-env-creds.sh
+
+params:
+  GCP_CREDENTIALS_JSON: ""
