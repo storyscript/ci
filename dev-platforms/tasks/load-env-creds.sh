@@ -18,7 +18,7 @@ gcloud auth activate-service-account --key-file="${account_file}"
 
 pushd "${output_dir}" > /dev/null
   gcloud secrets list --filter="labels.type:env-creds" --format="value(name)" | while read -r secret_name; do
-    export env_name=${secret_name##*_} # "##pattern" => delete longest match of pattern from the beginning
+    env_name=${secret_name##*_} # "##pattern" => delete longest match of pattern from the beginning
     gcloud secrets versions access latest --secret="$secret_name" > "${env_name}".json
   done
 popd > /dev/null
