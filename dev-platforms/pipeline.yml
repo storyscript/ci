@@ -319,7 +319,7 @@ jobs:
           repository: updated-env-pool
           rebase: true
 
-  - name: queue-pool-update
+  - name: queue-update
     plan:
       - in_parallel:
         - get: studio-ci
