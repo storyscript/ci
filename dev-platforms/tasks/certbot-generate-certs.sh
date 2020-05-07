@@ -42,6 +42,6 @@ EOF
 
 (cd "$output_dir" &&
   domains_list=$(echo $DOMAINS | awk '{split($0, domains, ","); for (i in domains) printf "-d%s ", domains[i]}')
-  certbot certonly --dns-google $domains_list --non-interactive --agree-tos -m "${WEBMASTER_EMAIL}" --dns-google-credentials "${account_file}"
+  certbot certonly --dns-google "$domains_list" --non-interactive --agree-tos -m "${WEBMASTER_EMAIL}" --dns-google-credentials "${account_file}"
   cp -Lr /etc/letsencrypt/live/* .
 )
