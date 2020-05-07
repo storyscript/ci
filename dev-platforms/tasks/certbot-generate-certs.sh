@@ -1,7 +1,9 @@
 #!/bin/ash
 
+set -euo pipefail
+
 # ENV
-: "${WEBMASTER_EMAIL:="steve@storyscript.com"}"
+: "${WEBMASTER_EMAIL:="steve@storyscript.io"}"
 : "${GCP_CREDENTIALS_JSON:?}"
 : "${DOMAINS:="
 storyscript-ci.com,
@@ -41,7 +43,7 @@ ${GCP_CREDENTIALS_JSON}
 EOF
 
 (cd "$output_dir" &&
-  domains_list=$(echo $DOMAINS | awk '{split($0, domains, ","); for (i in domains) printf "-d%s ", domains[i]}')
-  certbot certonly --dns-google "$domains_list" --non-interactive --agree-tos -m "${WEBMASTER_EMAIL}" --dns-google-credentials "${account_file}"
+  domains_list=$(echo $DOMAINS | awk '{split($0, domains, ","); for (i=1; i<=length(domains); i++) printf "-d %s ", domains[i]}')
+  certbot certonly $domains_list --dns-google --dns-google-credentials "${account_file}" -m "${WEBMASTER_EMAIL}" --non-interactive --agree-tos
   cp -Lr /etc/letsencrypt/live/* .
 )
