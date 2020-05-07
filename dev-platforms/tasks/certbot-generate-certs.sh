@@ -4,6 +4,8 @@
 : "${WEBMASTER_EMAIL:="steve@storyscript.com"}"
 : "${GCP_CREDENTIALS_JSON:?}"
 : "${DOMAINS:="
+storyscript-ci.com,
+storyscriptapp-ci.com,
 beatrix.storyscript-ci.com,
 *.beatrix.storyscript-ci.com,
 *.beatrix.storyscriptapp-ci.com,
@@ -21,9 +23,7 @@ sloter.storyscript-ci.com,
 *.sloter.storyscriptapp-ci.com,
 vondel.storyscript-ci.com,
 *.vondel.storyscript-ci.com,
-*.vondel.storyscriptapp-ci.com,
-storyscript-ci.com,
-storyscriptapp-ci.com
+*.vondel.storyscriptapp-ci.com
 "}"
 
 
@@ -43,4 +43,5 @@ EOF
 (cd "$output_dir" &&
   domains_list=$(echo $DOMAINS | awk '{split($0, domains, ","); for (i in domains) printf "-d%s ", domains[i]}')
   certbot certonly --dns-google $domains_list --non-interactive --agree-tos -m "${WEBMASTER_EMAIL}" --dns-google-credentials "${account_file}"
+  mv /etc/letsencrypt/storyscript.com/* .
 )
