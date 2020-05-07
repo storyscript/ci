@@ -1,0 +1,20 @@
+---
+platform: linux
+
+image_resource:
+  type: docker-image
+  source:
+    repository: certbot/dns-google
+
+inputs:
+  - name: studio-ci
+
+outputs:
+  - name: tls-certs
+
+params:
+  GCP_CREDENTIALS_JSON: ""
+  DOMAINS: ""
+
+run:
+  path: studio-ci/dev-platforms/tasks/certbot-generate-certs.sh
