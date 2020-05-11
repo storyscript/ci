@@ -18,6 +18,7 @@ jobs:
     - get: every-day
       trigger: true
     - get: studio-ci
+    # TODO: Don't execute the following task every day
     - task: renew-tls-certs
       file: studio-ci/tls-certs/tasks/renew-tls-certs.yml
       params:
