@@ -23,7 +23,9 @@ jobs:
       file: studio-ci/tls-certs/tasks/renew-tls-certs.yml
       params:
         GCP_CREDENTIALS_JSON: ((gcp_credentials_json))
-        DOMAINS: "storyscript.com, *.storyscript.com, storyscript.io, *.storyscript.io, storyscri.pt, *.storyscri.pt"
+        DOMAINS: "storyscript.com, *.storyscript.com,
+                  storyscript.io, *.storyscript.io,
+                  storyscri.pt, *.storyscri.pt"
     - task: update-tls-certs-netlify
       file: studio-ci/tls-certs/tasks/update-tls-certs-netlify.yml
       input_mapping:
