@@ -1,0 +1,30 @@
+---
+resources:
+  - name: studio-ci
+    type: git
+    source:
+      branch: master
+      uri: https://github.com/storyscriptinc/ci.git
+
+  - name: every-day
+    type: time
+    source:
+      interval: 24h
+
+
+jobs:
+- name: renew-prod-certs
+  plan:
+    - get: studio-ci
+    - task: renew-tls-certs
+      file: studio-ci/tls-certs/tasks/renew-tls-certs.yml
+      params:
+        GCP_CREDENTIALS_JSON: ((gcp_credentials_json))
+        DOMAINS: "storyscript.com, *.storyscript.com, storyscript.io, *.storyscript.io, storyscri.pt, *.storyscri.pt"
+    - task: update-tls-certs-netlify
+      file: studio-ci/tls-certs/tasks/renew-tls-certs.yml
+      input_mapping:
+        tls-certs: tls-certs/storyscript.com
+      params:
+        SITE_ID: ((netlify.site_id))
+        NETLIFY_AUTH_TOKEN: ((netlify.auth_token))

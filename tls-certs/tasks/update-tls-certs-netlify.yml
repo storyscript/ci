@@ -1,0 +1,16 @@
+---
+platform: linux
+
+image_resource:
+  type: docker-image
+  source:
+    repository: alpine/httpie
+
+inputs:
+  - name: studio-ci
+  - name: tls-certs
+
+params:
+
+run:
+  path: studio-ci/tls-certs/tasks/update-tls-certs-netlify.sh
