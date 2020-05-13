@@ -32,7 +32,7 @@ http:
   image:
     tag: latest
 
-language:
+compiler:
   image:
     tag: latest
 
