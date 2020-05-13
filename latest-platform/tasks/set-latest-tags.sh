@@ -16,6 +16,10 @@ auth:
   image:
     tag: latest
 
+compiler:
+  image:
+    tag: latest
+
 creds:
   image:
     tag: latest
@@ -29,10 +33,6 @@ graphql:
     tag: latest
 
 http:
-  image:
-    tag: latest
-
-compiler:
   image:
     tag: latest
 
