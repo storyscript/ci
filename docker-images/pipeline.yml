@@ -192,7 +192,7 @@ resources:
   - name: schema-image
     type: docker-image
     source:
-      repository: storyscript/schema
+      repository: storyscript/database
       username: {{dockerhub-username}}
       password: {{dockerhub-password}}
 
