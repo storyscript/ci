@@ -13,52 +13,40 @@ latest_tags_file="latest_tags.yml"
 
 cat > "${latest_tags_file}" <<EOF
 auth:
-  image:
-    tag: latest
+  image: storyscript/auth:latest
 
 compiler:
-  image:
-    tag: latest
+  image: storyscript/language:latest
 
 creds:
-  image:
-    tag: latest
+  image: storyscript/creds:latest
 
 geh:
-  image:
-    tag: latest
+  image: storyscript/geh:latest
 
 graphql:
-  image:
-    tag: latest
+  image: storyscript/graphql:latest
 
 http:
-  image:
-    tag: latest
+  image: storyscript/http:latest
 
 router:
-  image:
-    tag: latest
+  image: storyscript/router:latest
 
 runtime:
-  image:
-    tag: latest
+  image: storyscript/runtime:latest
 
 schema:
-  image:
-    tag: latest
+  image: storyscript/schema:latest
 
 sls:
-  image:
-    tag: latest
+  image: storyscript/sls:latest
 
 studio:
-  image:
-    tag: latest
+  image: storyscript/studio:latest
 
 worker:
-  image:
-    tag: latest
+  image: storyscript/worker:latest
 EOF
 
 yq merge "${helmconfig_dir}/values.yml" "${latest_tags_file}" > "${latest_helmconfig_dir}/values.yml"
