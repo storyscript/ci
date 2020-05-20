@@ -47,7 +47,8 @@ runtime:
   wolfram_app_id: ${WOLFRAM_APP_ID}
   github:
     app_id: "${github_app_id}"
-    app_private_key: "${github_app_private_key}"
+    app_private_key: |
+$(awk '{printf "      %s\n", $0}' < "${github_app_private_key}")
 
 postgresql:
   create: false
