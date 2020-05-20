@@ -48,7 +48,7 @@ runtime:
   github:
     app_id: "${github_app_id}"
     app_private_key: |
-$(awk '{printf "      %s\n", $0}' < "${github_app_private_key}")
+$(echo -n "${github_app_private_key}" | awk '{printf "      %s\n", $0}')
 
 postgresql:
   create: false
