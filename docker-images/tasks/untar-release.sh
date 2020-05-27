@@ -15,8 +15,5 @@ pushd "${release_dir}" > /dev/null
     # So use a wildcard to copy all files one folder down (inside {{repository}}-{{commit_hash}}) to the current directory (source)
     shopt -s dotglob # Include hidden files
     mv ./*/* .
-    # HACK for storyscript/sls: create empty .git directory
-    # See https://github.com/storyscript/sls/issues/228
-    mkdir .git
   popd > /dev/null
 popd > /dev/null

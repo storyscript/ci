@@ -212,27 +212,6 @@ resources:
       username: {{dockerhub-username}}
       password: {{dockerhub-password}}
 
-  ### SLS
-  - name: sls-release
-    type: github-release
-    source:
-      owner: storyscript
-      repository: sls
-      access_token: {{storyscript-infra-access-token}}
-
-  - name: sls-repo
-    type: git
-    source:
-      uri: git@github.com:storyscript/sls.git
-      private_key: ((storyscript-infra-ssh-key))
-
-  - name: sls-image
-    type: docker-image
-    source:
-      repository: storyscript/sls
-      username: {{dockerhub-username}}
-      password: {{dockerhub-password}}
-
   ### Studio
   - name: studio-release
     type: github-release
@@ -518,37 +497,6 @@ jobs:
         params:
           build: schema-ci-repo/ci/docker
           tag_as_latest: true
-
-  ### SLS
-  - name: build-sls-latest
-    plan:
-      - get: sls-repo
-        trigger: true
-      - put: sls-image
-        params:
-          build: sls-repo
-          tag_as_latest: true
-
-  - name: build-sls-release
-    plan:
-      - get: studio-ci
-      - get: sls-release
-        trigger: true
-        params:
-          include_source_tarball: true
-      - task: extract-tag
-        file: studio-ci/docker-images/tasks/extract-tag.yml
-        input_mapping: {release: sls-release}
-        output_mapping: {tag-env-var: sls-tag-env-var}
-      - task: untar-release
-        file: studio-ci/docker-images/tasks/untar-release.yml
-        input_mapping: {release: sls-release}
-        output_mapping: {source: sls-source}
-      - put: sls-image
-        params:
-          build: sls-source
-          build_args_file: sls-tag-env-var/tag-env-var.json
-          tag_file: sls-release/tag
 
   ### Studio
   - name: build-studio-latest
