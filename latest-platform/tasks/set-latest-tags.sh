@@ -48,10 +48,6 @@ schema:
   image:
     tag: latest
 
-sls:
-  image:
-    tag: latest
-
 studio:
   image:
     tag: latest

@@ -117,13 +117,6 @@ resources:
       username: {{dockerhub-username}}
       password: {{dockerhub-password}}
 
-  - name: sls-image
-    type: docker-image
-    source:
-      repository: storyscript/sls
-      username: {{dockerhub-username}}
-      password: {{dockerhub-password}}
-
   - name: studio-image
     type: docker-image
     source:
@@ -167,8 +160,6 @@ jobs:
       - get: runtime-image
         trigger: true
       - get: schema-image
-        trigger: true
-      - get: sls-image
         trigger: true
       - get: studio-image
         trigger: true
