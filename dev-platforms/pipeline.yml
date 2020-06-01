@@ -23,7 +23,7 @@ resources:
     type: git
     source:
       branch: master
-      uri: https://github.com/storyscriptinc/ci.git
+      uri: https://github.com/storyscript/ci.git
 
   - name: storyscript-chart-release
     type: github-release
