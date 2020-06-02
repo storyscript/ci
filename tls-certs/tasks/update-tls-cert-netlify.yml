@@ -8,9 +8,9 @@ image_resource:
 
 inputs:
   - name: studio-ci
-  - name: tls-certs
+  - name: tls-cert
 
 params:
 
 run:
-  path: studio-ci/tls-certs/tasks/update-tls-certs-netlify.sh
+  path: studio-ci/tls-certs/tasks/update-tls-cert-netlify.sh

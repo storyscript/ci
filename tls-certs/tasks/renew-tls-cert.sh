@@ -1,6 +1,6 @@
 #!/bin/ash
 
-set -euo pipefail
+set -euxo pipefail
 
 # ENV
 : "${WEBMASTER_EMAIL:="steve@storyscript.io"}"
@@ -33,7 +33,7 @@ vondel.storyscript-ci.com,
 workspace_dir=$(pwd)
 
 # OUTPUTS
-output_dir="${workspace_dir}/tls-certs"
+output_dir="${workspace_dir}/tls-cert"
 
 
 account_file=${workspace_dir}/account.json
@@ -45,5 +45,6 @@ EOF
 (cd "$output_dir" &&
   domains_list=$(echo $DOMAINS | awk '{split($0, domains, ","); for (i=1; i<=length(domains); i++) printf "-d %s ", domains[i]}')
   certbot certonly $domains_list --dns-google --dns-google-credentials "${account_file}" -m "${WEBMASTER_EMAIL}" --non-interactive --agree-tos
-  cp -Lr /etc/letsencrypt/live/* .
+  first_domain=$(echo $DOMAINS | awk '{split($0, domains, ","); printf domains[1]}')
+  cp -L /etc/letsencrypt/live/"${first_domain}"/* .
 )

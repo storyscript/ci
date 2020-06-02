@@ -10,11 +10,11 @@ inputs:
   - name: studio-ci
 
 outputs:
-  - name: tls-certs
+  - name: tls-cert
 
 params:
   GCP_CREDENTIALS_JSON: ""
   DOMAINS: ""
 
 run:
-  path: studio-ci/dev-platforms/tasks/certbot-generate-certs.sh
+  path: studio-ci/tls-certs/tasks/renew-tls-cert.sh

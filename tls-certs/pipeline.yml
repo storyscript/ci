@@ -1,4 +1,10 @@
----
+resource_types:
+  - name: tls-trigger
+    type: docker-image
+    source:
+      repository: anukulsangwan/tls-trigger-resource
+
+
 resources:
   - name: studio-ci
     type: git
@@ -6,30 +12,33 @@ resources:
       branch: master
       uri: https://github.com/storyscript/ci.git
 
-  - name: every-day
-    type: time
+  - name: prod-cert-trigger
+    type: tls-trigger
+    check_every: 24h
     source:
-      interval: 24h
+      domain: storyscript.com
+      expires_in: 14
 
 
 jobs:
-- name: renew-prod-certs
-  plan:
-    - get: every-day
-      trigger: true
-    - get: studio-ci
-    # TODO: Don't execute the following task every day
-    - task: renew-tls-certs
-      file: studio-ci/tls-certs/tasks/renew-tls-certs.yml
-      params:
-        GCP_CREDENTIALS_JSON: ((gcp_credentials_json))
-        DOMAINS: "storyscript.com, *.storyscript.com,
-                  storyscript.io, *.storyscript.io,
-                  storyscri.pt, *.storyscri.pt"
-    - task: update-tls-certs-netlify
-      file: studio-ci/tls-certs/tasks/update-tls-certs-netlify.yml
-      input_mapping:
-        tls-certs: tls-certs/storyscript.com
-      params:
-        SITE_ID: ((netlify.site_id))
-        NETLIFY_AUTH_TOKEN: ((netlify.auth_token))
+  - name: renew-prod-cert
+    plan:
+      - get: studio-ci
+      - get: prod-cert-trigger
+        trigger: true
+      - task: renew-tls-cert
+        file: studio-ci/tls-certs/tasks/renew-tls-cert.yml
+        params:
+          GCP_CREDENTIALS_JSON: ((gcp_credentials_json))
+          DOMAINS: "storyscript.com, *.storyscript.com,
+                    storyscript.io, *.storyscript.io,
+                    storyscri.pt, *.storyscri.pt"
+      - task: update-tls-cert-netlify
+        file: studio-ci/tls-certs/tasks/update-tls-cert-netlify.yml
+        params:
+          SITE_ID: ((netlify.site_id))
+          NETLIFY_AUTH_TOKEN: ((netlify.auth_token))
+      - task: update-tls-cert-kubernetes
+        file: studio-ci/tls-certs/tasks/update-tls-cert-kubernetes.yml
+        params:
+          GCP_CREDENTIALS_JSON: ((gcp_credentials_json))
