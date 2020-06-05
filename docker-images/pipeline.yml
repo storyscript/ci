@@ -118,28 +118,6 @@ resources:
       username: {{dockerhub-username}}
       password: {{dockerhub-password}}
 
-  ### Language
-  - name: language-release
-    type: github-release
-    source:
-      owner: storyscript
-      repository: language
-      access_token: {{storyscript-infra-access-token}}
-
-  - name: language-repo
-    type: git
-    source:
-      uri: git@github.com:storyscript/language.git
-      private_key: ((storyscript-infra-ssh-key))
-      branch: dev
-
-  - name: language-image
-    type: docker-image
-    source:
-      repository: storyscript/language
-      username: {{dockerhub-username}}
-      password: {{dockerhub-password}}
-
   ### Router
   - name: router-release
     type: github-release
@@ -397,32 +375,6 @@ jobs:
         params:
           build: http-source
           tag_file: http-release/tag
-
-  ### Language
-  - name: build-language-latest
-    plan:
-      - get: language-repo
-        trigger: true
-      - put: language-image
-        params:
-          build: language-repo
-          tag_as_latest: true
-
-  - name: build-language-release
-    plan:
-      - get: studio-ci
-      - get: language-release
-        trigger: true
-        params:
-          include_source_tarball: true
-      - task: untar-release
-        file: studio-ci/docker-images/tasks/untar-release.yml
-        input_mapping: {release: language-release}
-        output_mapping: {source: language-source}
-      - put: language-image
-        params:
-          build: language-source
-          tag_file: language-release/tag
 
   ### Router
   - name: build-router-latest
