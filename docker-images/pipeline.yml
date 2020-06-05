@@ -10,7 +10,7 @@ resources:
   - name: studio-ci
     type: git
     source:
-      branch: pr-images
+      branch: master
       uri: https://github.com/storyscript/ci.git
 
   ### auth
