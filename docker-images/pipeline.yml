@@ -1,9 +1,16 @@
 ---
+resource_types:
+  - name: pull-request
+    type: docker-image
+    source:
+      repository: teliaoss/github-pr-resource
+
+
 resources:
   - name: studio-ci
     type: git
     source:
-      branch: master
+      branch: pr-images
       uri: https://github.com/storyscript/ci.git
 
   ### auth
@@ -225,6 +232,12 @@ resources:
     source:
       uri: git@github.com:storyscript/studio.git
       private_key: ((storyscript-infra-ssh-key))
+
+  - name: studio-pr
+    type: pull-request
+    source:
+      repository: storyscript/studio
+      access_token: {{storyscript-infra-access-token}}
 
   - name: studio-image
     type: docker-image
@@ -508,6 +521,39 @@ jobs:
           build: studio-repo
           dockerfile: studio-repo/.docker/Dockerfile.docker
           tag_as_latest: true
+
+  - name: build-studio-pr
+    plan:
+      - get: studio-pr
+        trigger: true
+      - put: studio-pr
+        params:
+          path: studio-pr
+          status: PENDING
+          context: docker-image
+      - put: studio-image
+        params:
+          build: studio-pr
+          dockerfile: studio-pr/.docker/Dockerfile.docker
+          tag_file: studio-pr/.git/resource/head_name
+    on_success:
+      put: studio-pr
+      params:
+        path: studio-pr
+        status: SUCCESS
+        context: docker-image
+    on_failure:
+      put: studio-pr
+      params:
+        path: studio-pr
+        status: FAILURE
+        context: docker-image
+    on_error:
+      put: studio-pr
+      params:
+        path: studio-pr
+        status: ERROR
+        context: docker-image
 
   - name: build-studio-release
     plan:
