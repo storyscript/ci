@@ -29,7 +29,7 @@ jobs:
       - task: renew-tls-cert
         file: studio-ci/tls-certs/tasks/renew-tls-cert.yml
         params:
-          GCP_CREDENTIALS_JSON: ((gcp_credentials_json))
+          GCP_CREDENTIALS_JSON: ((gcp_storyscript_credentials_json))
           DOMAINS: "storyscript.com, *.storyscript.com,
                     storyscript.io, *.storyscript.io,
                     storyscri.pt, *.storyscri.pt"
@@ -41,4 +41,14 @@ jobs:
       - task: update-tls-cert-kubernetes
         file: studio-ci/tls-certs/tasks/update-tls-cert-kubernetes.yml
         params:
-          GCP_CREDENTIALS_JSON: ((gcp_credentials_json))
+          GCP_CREDENTIALS_JSON: ((gcp_storyscript_credentials_json))
+
+  - name: renew-dev-platform-cert
+    plan:
+      - get: studio-ci
+      - task: renew-tls-cert
+        file: studio-ci/tls-certs/tasks/renew-tls-cert.yml
+        params:
+          GCP_CREDENTIALS_JSON: ((gcp_storyscript-ci_credentials_json))
+      - task: echo-tls-cert
+        file: studio-ci/tls-certs/tasks/echo-tls-cert.yml
