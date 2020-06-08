@@ -11,6 +11,8 @@ inputs:
   - name: tls-cert
 
 params:
+  SITE_ID: ""
+  NETLIFY_AUTH_TOKEN: ""
 
 run:
   path: studio-ci/tls-certs/tasks/update-tls-cert-netlify.sh
