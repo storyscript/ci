@@ -118,6 +118,27 @@ resources:
       username: {{dockerhub-username}}
       password: {{dockerhub-password}}
 
+  ### NLP Service
+  - name: nlp-release
+    type: github-release
+    source:
+      owner: storyscript
+      repository: nlp-api
+      access_token: {{storyscript-infra-access-token}}
+
+  - name: nlp-repo
+    type: git
+    source:
+      uri: git@github.com:storyscript/nlp-api.git
+      private_key: ((storyscript-infra-ssh-key))
+
+  - name: nlp-image
+    type: docker-image
+    source:
+      repository: storyscript/nlp
+      username: {{dockerhub-username}}
+      password: {{dockerhub-password}}
+
   ### Router
   - name: router-release
     type: github-release
@@ -375,6 +396,32 @@ jobs:
         params:
           build: http-source
           tag_file: http-release/tag
+
+  ### NLP Service
+  - name: build-nlp-latest
+    plan:
+      - get: nlp-repo
+        trigger: true
+      - put: nlp-image
+        params:
+          build: nlp-repo
+          tag_as_latest: true
+
+  - name: build-nlp-release
+    plan:
+      - get: studio-ci
+      - get: nlp-release
+        trigger: true
+        params:
+          include_source_tarball: true
+      - task: untar-release
+        file: studio-ci/docker-images/tasks/untar-release.yml
+        input_mapping: {release: nlp-release}
+        output_mapping: {source: nlp-source}
+      - put: nlp-image
+        params:
+          build: nlp-source
+          tag_file: nlp-release/tag
 
   ### Router
   - name: build-router-latest
