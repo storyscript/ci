@@ -96,6 +96,13 @@ resources:
       username: {{dockerhub-username}}
       password: {{dockerhub-password}}
 
+  - name: nlp-image
+    type: docker-image
+    source:
+      repository: storyscript/nlp
+      username: {{dockerhub-username}}
+      password: {{dockerhub-password}}
+
   - name: router-image
     type: docker-image
     source:
@@ -154,6 +161,8 @@ jobs:
       - get: http-image
         trigger: true
       - get: language-image
+        trigger: true
+      - get: nlp-image
         trigger: true
       - get: router-image
         trigger: true
