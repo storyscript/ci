@@ -11,7 +11,7 @@ inputs:
   - name: studio-ci
   - name: kubeconfig
   - name: helmconfig
-  - name: storyscript-chart
+  - name: helm-chart
     optional: true
 
 params:

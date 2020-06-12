@@ -25,11 +25,11 @@ resources:
       branch: master
       uri: https://github.com/storyscript/ci.git
 
-  - name: storyscript-chart-release
+  - name: helm-chart-release
     type: github-release
     source:
       owner: storyscript
-      repository: storyscript-chart
+      repository: helm-chart
       access_token: {{storyscript-infra-access-token}}
 
   - name: platform-terraform-source
@@ -326,7 +326,7 @@ jobs:
         - get: pool-repo
         - get: platform-terraform-source
           trigger: true
-        - get: storyscript-chart-release
+        - get: helm-chart-release
           trigger: true
       - task: queue-update
         file: studio-ci/dev-platforms/tasks/queue-update.yml

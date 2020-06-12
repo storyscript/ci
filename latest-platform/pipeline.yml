@@ -24,11 +24,11 @@ resources:
       uri: git@github.com:storyscript/storyscript-platform-terraform.git
       private_key: ((storyscript-infra-ssh-key))
 
-  - name: storyscript-chart
+  - name: helm-chart
     type: git
     source:
       branch: master
-      uri: git@github.com:storyscript/storyscript-chart.git
+      uri: git@github.com:storyscript/helm-chart.git
       private_key: ((storyscript-infra-ssh-key))
 
   - name: pool-repo
@@ -144,7 +144,7 @@ jobs:
   plan:
     - in_parallel:
       - get: studio-ci
-      - get: storyscript-chart
+      - get: helm-chart
         trigger: true
       - get: latest-platform-update-helm-trigger
         trigger: true
