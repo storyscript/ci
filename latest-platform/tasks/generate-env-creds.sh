@@ -14,6 +14,7 @@ jq -n \
   --arg slack_client_id "$SLACK_CLIENT_ID" \
   --arg slack_client_secret "$SLACK_CLIENT_SECRET" \
   --arg slack_signing_secret "$SLACK_SIGNING_SECRET" \
+  --arg onegraph_app_id "$ONEGRAPH_APP_ID" \
 '{
   github: {
     app_id: $github_app_id,
@@ -25,5 +26,8 @@ jq -n \
     client_id: $slack_client_id,
     client_secret: $slack_client_secret,
     signing_secret: $slack_signing_secret
+  },
+  onegraph: {
+    app_id: $onegraph_app_id
   }
 }' > "${output_dir}/latest.json"

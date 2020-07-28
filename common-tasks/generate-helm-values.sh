@@ -24,6 +24,8 @@ slack_client_id="$(jq -r .slack.client_id < "${env_creds_dir}/${env_name}.json")
 slack_client_secret="$(jq -r .slack.client_secret < "${env_creds_dir}/${env_name}.json")"
 slack_signing_secret="$(jq -r .slack.signing_secret < "${env_creds_dir}/${env_name}.json")"
 
+onegraph_app_id="$(jq -r .onegraph.app_id < "${env_creds_dir}/${env_name}.json")"
+
 google_service_account_key="$(jq -r .service_account_key < "${terraform_dir}/metadata")"
 
 cat > "${helm_dir}/values.yml" <<EOF
@@ -82,4 +84,6 @@ $(echo -n "${google_service_account_key}" | awk '{printf "      %s\n", $0}')
   slack:
     client_id: "${slack_client_id}"
     client_secret: ${slack_client_secret}
+  onegraph:
+    app_id: "${onegraph_app_id}"
 EOF
