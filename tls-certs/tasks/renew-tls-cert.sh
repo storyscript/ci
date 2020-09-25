@@ -25,7 +25,8 @@ sloter.storyscript-ci.com,
 *.sloter.storyscriptapp-ci.com,
 vondel.storyscript-ci.com,
 *.vondel.storyscript-ci.com,
-*.vondel.storyscriptapp-ci.com
+*.vondel.storyscriptapp-ci.com,
+pages-ci.storyscript-ci.com
 "}"
 
 
