@@ -20,6 +20,7 @@ params:
   SLACK_CLIENT_ID: ""
   SLACK_CLIENT_SECRET: ""
   SLACK_SIGNING_SECRET: ""
+  ONEGRAPH_APP_ID: ""
 
 run:
   path: studio-ci/latest-platform/tasks/generate-env-creds.sh
